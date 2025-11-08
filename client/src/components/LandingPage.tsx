@@ -24,7 +24,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             Discover Ai Therapy
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto" data-testid="text-subheading">
-             Personalized 5 Question Assessment leading the way to adaptive, structured therapy sessions.
+             A Single Personalized 5 Question Assessment leads the way to adaptive, structured therapy sessions.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           ].map((item, index) => (
             <div
               key={index}
-              className="flex items-start gap-2 text-muted-foreground justify-center md:justify-start"
+              className="flex items-start gap-1.5 text-muted-foreground justify-center md:justify-start"
               data-testid={`trust-signal-${index}`}
             >
               <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
