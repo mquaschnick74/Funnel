@@ -1,0 +1,505 @@
+# iVASA Inner Landscape Assessment - Standalone Lead Generation Funnel
+
+## PROJECT OVERVIEW
+
+Create a standalone single-page web application for lead generation that runs BEFORE user signup. This is a pre-signup assessment quiz that:
+1. Captures leads through an engaging 5-question "Inner Landscape" assessment
+2. Generates a personalized therapeutic profile
+3. Shows partial results as a "hook" to drive signups
+4. Redirects to the main iVASA app at beta.ivasa.ai with profile data
+
+This is NOT the post-signup onboarding - this is a marketing funnel to acquire new users.
+
+---
+
+## TECH STACK
+
+**Simple & Fast:**
+- Single HTML file with embedded React (via CDN)
+- Vanilla CSS for styling
+- No build process (instant loading critical for ads)
+- Client-side only (no backend needed initially)
+- Responsive mobile-first design
+
+**OR if you prefer a framework:**
+- Vite + React + TypeScript
+- Tailwind CSS
+- Single route application
+
+**Choose whichever you think will be fastest to load and easiest to maintain.**
+
+---
+
+## APPLICATION FLOW
+
+### **Page 1: Landing Page**
+
+**Hero Section:**
+- Headline: "Discover Your Inner Landscape"
+- Subheadline: "A 2-minute assessment based on Pure Contextual Perception therapy - developed by a licensed therapist"
+- CTA Button: "Start Assessment" (large, emerald green, prominent)
+- Background: Subtle abstract landscape illustration or gradient
+
+**Trust Signals:**
+- "✓ Takes 90 seconds"
+- "✓ 1,000+ therapeutic sessions conducted"
+- "✓ Based on 20+ years of clinical research"
+- "✓ Completely confidential"
+
+**Visual Style:**
+- Clean, minimal aesthetic
+- Dark background (#0f0f1a or similar)
+- Emerald accent color (#10b981)
+- Soft, calming feeling
+- NOT clinical/medical looking
+
+### **Page 2: Assessment Quiz (5 Questions)**
+
+**Header:**
+- Progress bar showing "Question X of 5"
+- Small logo/text: "iVASA Assessment"
+- Optional: Subtle background image per question (like main app scenes)
+
+**Question Format:**
+Each question displays:
+1. Question number indicator
+2. Question text (larger, readable)
+3. 4-6 choice buttons (substantial, clickable, clear feedback on hover)
+4. "Skip this question" option (small, subtle - we want completion)
+
+**Button Interaction:**
+- Click button → Smooth transition to next question
+- No "Next" button needed (selecting answer auto-advances)
+- Smooth fade transitions between questions
+
+**The 5 Questions:**
+
+**Question 1:**
+"When you think about your anxiety, it feels like..."
+
+**Choices:**
+- A storm on the horizon - dark clouds gathering, electricity in the air
+- A maze of mirrors - endless reflections, hard to know which way is real
+- A fog bank - can't see clearly, unsure what's ahead
+- A vast, empty plateau - quiet, still, but somehow unsettling
+- Fractured ground - the earth itself seems unstable, constantly shifting
+
+**Question 2:**
+"When facing two choices that both feel impossible, you typically..."
+
+**Choices:**
+- Stand frozen between them - unable to choose because both feel right and wrong
+- Rush down one path, then panic and run back - keep switching, never committing
+- Try to build a bridge between them - maybe you can combine them somehow
+- Sit down in the middle - you'll wait until you know for sure
+- Close your eyes and let your body choose - see what happens
+- Split yourself in two to walk both - you'll just do everything
+
+**Question 3:**
+"In your daily life, worry or anxiety feels..."
+
+**Choices:**
+- Almost constant - like perpetual storms, the weather is always turbulent
+- Sudden and intense - calm, then BOOM, overwhelming, then calm again
+- A persistent gray cloud - not dramatic, but the sun hasn't broken through in a while
+- Completely unpredictable - you never know what's coming, which makes it worse
+- Occasional but intense - rare, but you want to understand and prevent it
+
+**Question 4:**
+"The idea of truly resting - like actually stopping and being still - feels..."
+
+**Choices:**
+- Impossible - you can't rest until everything is handled
+- Dangerous - if you stop, something bad will happen
+- Guilty - rest feels like failure or selfishness
+- Confusing - you don't know how to rest anymore
+- Uncomfortable, but doable - you can sit with the discomfort
+- Your body won't let you - too much activation to settle
+
+**Question 5:**
+"If things could shift - if your relationship with anxiety could change - you'd most want..."
+
+**Choices:**
+- Your body to feel calm and settled - the ground beneath you steady
+- Emotions to pass through like weather - they come and go, but don't control you
+- Anxiety to walk beside you quietly - still there, but not consuming
+- To make decisions without panic - paths don't feel like traps
+- To simply breathe - fundamental, but everything
+- All of these - the whole landscape feels different
+
+### **Page 3: "Generating Your Profile..." (Loading Screen)**
+
+**Display for 3-4 seconds:**
+- Animated loading indicator (spinning, pulsing, or progress bar)
+- Text that cycles through:
+  - "Analyzing your responses..."
+  - "Mapping your inner landscape..."
+  - "Identifying your pattern..."
+  - "Generating your therapeutic profile..."
+- Smooth, professional feeling
+- Builds anticipation
+
+**Purpose:** 
+- Creates perceived value (the system is "working")
+- Gives time for user to commit mentally
+- Increases conversion to next page
+
+### **Page 4: Partial Results (THE CONVERSION PAGE)**
+
+**Structure:**
+
+**Your Pattern: [Generated Title]**
+Example: "The Storm Watcher" or "The Mirror Maze" or "The Fractured Ground"
+
+**Visible Section (Above the fold):**
+
+Brief profile summary (2-3 paragraphs):
+You experience anxiety as [metaphor from Q1].
+When facing difficult choices, you [pattern from Q2], which creates [specific challenge].
+[One insight about their frequency/chronicity from Q3].
+
+**Example:**
+Your Pattern: The Storm Watcher
+You experience anxiety as constant anticipation - always scanning
+the horizon for what might go wrong. The storms feel endless,
+electricity crackling in the air.
+When facing difficult choices, you freeze between options, unable
+to move forward because both paths feel simultaneously right and
+impossible. This creates a particular kind of exhaustion - the
+paralysis of contradictions.
+For you, anxiety isn't occasional. It's the weather you live in -
+perpetual storms that shape how you move through your days.
+
+**Blurred/Locked Section:**
+
+Show 3-4 more sections but blur them with a glassmorphic overlay:
+- "Your Therapeutic Approach: [LOCKED]"
+- "What This Means for Your Journey: [LOCKED]"
+- "Your Personalized Path Forward: [LOCKED]"
+- "How iVASA Can Help: [LOCKED]"
+
+**CTA (Large, prominent):**
+[Create Free Account to See Your Complete Profile]
+Takes 30 seconds • Start your first session today
+
+**Social Proof (Below CTA):**
+- "Join 1,000+ people discovering their inner landscape"
+- Small testimonial carousel (if available)
+
+**Alternative Option (Smaller, subtle):**
+[Maybe Later - Just Email Me My Results]
+This captures email if they're not ready to signup (backup conversion)
+
+---
+
+## PROFILE COMPUTATION LOGIC
+
+Based on user's answers, compute their profile:
+
+**Question 1 Mapping (Metaphor & Register):**
+```javascript
+const q1Mapping = {
+  'storm_on_horizon': { 
+    metaphor: 'Storm Watcher', 
+    register: 'imaginary',
+    description: 'constant anticipation - always scanning the horizon for what might go wrong'
+  },
+  'maze_of_mirrors': { 
+    metaphor: 'Mirror Maze', 
+    register: 'symbolic',
+    description: 'endless self-reflection and questioning, analyzing every angle'
+  },
+  'fog_bank': { 
+    metaphor: 'Fog Walker', 
+    register: 'imaginary',
+    description: 'uncertainty and the need to see clearly before moving forward'
+  },
+  'empty_plateau': { 
+    metaphor: 'Empty Plateau', 
+    register: 'real',
+    description: 'disconnection and numbness, a quiet unsettling stillness'
+  },
+  'fractured_ground': { 
+    metaphor: 'Fractured Ground', 
+    register: 'symbolic',
+    description: 'instability and contradiction, the ground itself feels unreliable'
+  }
+};
+```
+
+**Question 2 Mapping (CVDC Pattern):**
+```javascript
+const q2Mapping = {
+  'stand_frozen': 'you freeze between options, unable to move forward because both paths feel simultaneously right and impossible',
+  'rush_back': 'you rush between options frantically, never able to commit because each choice collapses when you choose it',
+  'build_bridge': 'you try to combine contradictory options, which often creates a new layer of complexity',
+  'sit_middle': 'you avoid choosing altogether, waiting for certainty that may never come',
+  'close_eyes': 'you let your body decide, trusting sensation over thought',
+  'split_yourself': 'you attempt to do everything, trying to walk both paths simultaneously'
+};
+```
+
+**Question 3 Mapping (Chronicity):**
+```javascript
+const q3Mapping = {
+  'almost_constant': 'For you, anxiety isn\'t occasional. It\'s the weather you live in - perpetual storms that shape how you move through your days.',
+  'sudden_intense': 'Your anxiety comes in sudden, intense waves - calm one moment, overwhelming the next. The unpredictability itself becomes part of the challenge.',
+  'persistent_gray': 'Anxiety for you is a persistent gray overcast - not dramatic, but always there, dulling the color of daily life.',
+  'unpredictable': 'The unpredictability of when anxiety will strike creates its own anxiety - you\'re always braced for what might come.',
+  'occasional_intense': 'While not constant, when anxiety does emerge, it\'s powerful enough that you want to understand and prevent it.'
+};
+```
+
+**Question 4 Mapping (Thend Capacity):**
+```javascript
+const q4Mapping = {
+  'impossible': 'Rest feels impossible until every task is complete - but the tasks are never truly done.',
+  'dangerous': 'You\'ve learned that stopping means something might go wrong - vigilance feels like safety.',
+  'guilty': 'Resting carries guilt, as if stillness is somehow selfish or irresponsible.',
+  'confusing': 'You\'ve forgotten how to rest - the skill has atrophied from lack of practice.',
+  'uncomfortable_doable': 'While uncomfortable, you can sit with stillness - this is actually a strength.',
+  'body_wont': 'Your nervous system won\'t allow rest - there\'s too much activation for settling.'
+};
+```
+
+**Question 5 Mapping (Goal):**
+```javascript
+const q5Mapping = {
+  'body_calm': 'What you long for most is somatic peace - a body that feels calm and settled.',
+  'weather': 'You want anxiety to become like weather - it comes and passes, but doesn\'t control you.',
+  'beside_quiet': 'You\'re seeking a different relationship with anxiety - where it walks beside you quietly instead of consuming you.',
+  'decisions_easy': 'You want to make decisions without the paralysis of panic - where choices feel navigable.',
+  'breathe': 'Your deepest wish is simple but profound - to breathe freely.',
+  'all_different': 'You envision comprehensive transformation - where the entire inner landscape feels different.'
+};
+```
+
+**Generate Profile Text:**
+
+Combine the mappings into coherent paragraphs. The visible section shows:
+1. Opening with their metaphor/pattern name
+2. How they experience anxiety (Q1)
+3. How they handle contradictions (Q2)
+4. Their chronicity pattern (Q3)
+
+The locked sections (show titles but blur content) include:
+- Their capacity for rest (Q4)
+- Their therapeutic goal (Q5)
+- Recommended approach based on profile
+- How iVASA specifically helps their pattern
+
+---
+
+## SIGNUP REDIRECT & DATA PASSING
+
+When user clicks "Create Free Account":
+
+**Option A: URL Parameters (Simple):**
+https://beta.ivasa.ai/signup?source=assessment&profile=[base64-encoded-json]
+
+Encode their answers and computed profile:
+```javascript
+const profileData = {
+  q1: selectedAnswers[1],
+  q2: selectedAnswers[2],
+  q3: selectedAnswers[3],
+  q4: selectedAnswers[4],
+  q5: selectedAnswers[5],
+  pattern: computedPattern,
+  metaphor: computedMetaphor,
+  timestamp: Date.now()
+};
+
+const encoded = btoa(JSON.stringify(profileData));
+window.location.href = `https://beta.ivasa.ai/signup?source=assessment&profile=${encoded}`;
+```
+
+**Option B: LocalStorage (Cleaner URL):**
+```javascript
+localStorage.setItem('assessment_profile', JSON.stringify(profileData));
+window.location.href = 'https://beta.ivasa.ai/signup?source=assessment';
+```
+
+Main app reads from localStorage after signup and stores in database.
+
+**Recommendation:** Use Option A (URL params) - more reliable across domains and devices.
+
+---
+
+## EMAIL CAPTURE FALLBACK
+
+If user clicks "Email Me My Results" instead:
+
+**Simple Form:**
+- Email input field
+- "Send My Results" button
+- Privacy note: "We'll never spam you"
+
+**Action:**
+Store email in Supabase (or send to Zapier/Make webhook if no backend):
+```javascript
+// POST to webhook
+fetch('https://hooks.zapier.com/hooks/catch/[your-webhook]/', {
+  method: 'POST',
+  body: JSON.stringify({
+    email: userEmail,
+    profile: profileData,
+    source: 'assessment_email_capture',
+    timestamp: Date.now()
+  })
+});
+```
+
+Then send automated email with:
+- Their partial results
+- Link to complete the assessment by signing up
+- Nurture sequence to convert them later
+
+---
+
+## ANALYTICS & TRACKING
+
+**Events to Track:**
+1. `page_view` - Landing page loaded
+2. `assessment_started` - Clicked "Start Assessment"
+3. `question_1_answered` - Completed first question
+4. `question_2_answered` - etc.
+5. `assessment_completed` - Finished all 5 questions
+6. `results_viewed` - Saw their profile
+7. `signup_clicked` - Clicked create account button
+8. `email_captured` - Provided email as backup
+
+**Implementation:**
+Use simple fetch calls to your analytics endpoint:
+```javascript
+function trackEvent(eventName, properties = {}) {
+  fetch('/api/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      event: eventName,
+      properties: properties,
+      timestamp: Date.now(),
+      sessionId: getSessionId()
+    })
+  }).catch(err => console.log('Analytics error:', err));
+}
+```
+
+Or use Google Analytics, Mixpanel, or PostHog if you prefer.
+
+---
+
+## DESIGN SPECIFICATIONS
+
+**Color Palette:**
+- Background: `#0f0f1a` (dark, almost black)
+- Primary accent: `#10b981` (emerald green)
+- Text: `#ffffff` (white for headings), `#a0a0b0` (light gray for body)
+- Borders: `#10b981` at 30% opacity
+- Buttons: Emerald green with glow effect on hover
+
+**Typography:**
+- Headings: Inter or System UI, bold, large (32-48px)
+- Body: Inter or System UI, normal, readable (16-18px)
+- Line height: 1.6 for readability
+
+**Spacing:**
+- Generous whitespace
+- Mobile-first: 16px padding minimum
+- Desktop: 24-32px padding
+
+**Animations:**
+- Smooth transitions (300ms ease)
+- Subtle fade-ins on question changes
+- Hover states on buttons (scale + glow)
+- Loading animations feel premium
+
+**Mobile Responsiveness:**
+- Single column layout on mobile
+- Touch-friendly button sizes (min 44px height)
+- Questions stack vertically
+- Progress bar always visible at top
+
+---
+
+## DEPLOYMENT & DOMAIN
+
+**Replit Configuration:**
+- Set up custom domain: `start.ivasa.ai` or `assess.ivasa.ai`
+- Enable HTTPS (automatic with Replit)
+- Set up environment variables if needed
+
+**Performance:**
+- Keep bundle size under 100KB
+- Lazy load images
+- Preload critical assets
+- Target < 2 second load time
+
+---
+
+## TESTING CHECKLIST
+
+Before launching:
+
+1. **Mobile Testing:**
+   - Test on iPhone (Safari)
+   - Test on Android (Chrome)
+   - Check button sizes are touch-friendly
+   - Verify text is readable without zoom
+
+2. **Flow Testing:**
+   - Complete assessment with each answer combination
+   - Verify profile generation is accurate
+   - Test signup redirect with profile data
+   - Test email capture fallback
+
+3. **Analytics Testing:**
+   - Verify all events fire correctly
+   - Check data reaches analytics platform
+   - Test UTM parameter preservation
+
+4. **Load Testing:**
+   - Test on slow 3G connection
+   - Verify graceful loading states
+   - Check images load properly
+
+5. **Cross-browser:**
+   - Chrome, Firefox, Safari, Edge
+   - Mobile Safari (critical for iOS)
+
+---
+
+## DELIVERABLES
+
+Create:
+1. Single-page application with all 4 pages/states
+2. Profile computation logic with all mappings
+3. Signup redirect with data passing
+4. Email capture fallback (optional but recommended)
+5. Basic analytics tracking
+6. Mobile-responsive design
+7. README with deployment instructions
+
+**Critical Constraints:**
+- Must load in < 2 seconds (this is from paid ads)
+- Must work perfectly on mobile (60%+ of traffic will be mobile)
+- Must gracefully handle all answer combinations
+- Cannot break if main app (beta.ivasa.ai) is down
+- Must be professional but not intimidating/clinical
+
+---
+
+## SUCCESS METRICS
+
+Target conversion rates:
+- Landing page → Start quiz: **60%+**
+- Start quiz → Complete quiz: **70%+**
+- Complete quiz → Signup click: **30%+**
+- **Overall: Landing → Signup: 12-15%**
+
+If you hit these metrics, the funnel is working well for paid advertising.
+
+---
+
+Please implement this standalone assessment application. Ask clarifying questions if anything is unclear about the therapeutic framework, design aesthetic, or technical requirements.
