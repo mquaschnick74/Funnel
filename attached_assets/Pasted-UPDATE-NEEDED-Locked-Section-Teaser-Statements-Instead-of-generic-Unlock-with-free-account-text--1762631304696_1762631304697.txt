@@ -1,0 +1,49 @@
+UPDATE NEEDED: Locked Section Teaser Statements
+
+Instead of generic "Unlock with free account" text, each locked section needs compelling, specific teaser statements that create curiosity and drive conversion.
+
+**Section 1: Your Therapeutic Approach**
+Display:
+- 🔒 Emoji lock icon
+- Title: "Your Therapeutic Approach"
+- Teaser: "Discover why traditional 'just relax' advice doesn't work for your pattern - and what actually does."
+- CTA text: "[Unlock to see your personalized clinical approach]"
+
+**Section 2: What This Means for Your Journey**
+Display:
+- 🔒 Emoji lock icon
+- Title: "What This Means for Your Journey"
+- Teaser: "Learn how your specific pattern affects decision-making, relationships, and your capacity for rest."
+- CTA text: "[Unlock to understand your deeper patterns]"
+
+**Section 3: Your Personalized Path Forward**
+Display:
+- 🔒 Emoji lock icon
+- Title: "Your Personalized Path Forward"
+- Teaser: "See the exact stages of therapeutic progression designed specifically for your inner landscape."
+- CTA text: "[Unlock your therapeutic roadmap]"
+
+**Section 4: How iVASA Can Help**
+Display:
+- 🔒 Emoji lock icon
+- Title: "How iVASA Can Help You"
+- Teaser: "Discover how AI-powered therapeutic support addresses your specific pattern - available 24/7 when you need it most."
+- CTA text: "[Start your journey today]"
+
+STYLING:
+- Lock icon should be subtle, not overwhelming
+- Teaser text should be slightly smaller than visible profile text
+- Blur/glassmorphic overlay should make text barely readable but tantalizing
+- CTA text in emerald green color to stand out
+- Entire locked section should be clickable (not just the CTA)
+- On click, scroll to main "Create Free Account" button
+
+PSYCHOLOGICAL GOAL:
+These teasers should create:
+1. Curiosity - "What specifically does it say about ME?"
+2. Specificity - Not generic advice, but MY pattern
+3. Value - This is professional clinical insight
+4. FOMO - Others are getting this, I should too
+5. Urgency - Implicit "this information is valuable and waiting"
+
+Please update the LockedSection component to use these specific teaser statements.

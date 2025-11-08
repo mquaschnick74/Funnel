@@ -22,5 +22,9 @@ export default function ResultsPageExample() {
     q5: 'body_calm',
   };
 
-  return <ResultsPage profile={mockProfile} answers={mockAnswers} />;
+  return (
+    <div className="min-h-screen">
+      <ResultsPage profile={mockProfile} answers={mockAnswers} />
+    </div>
+  );
 }

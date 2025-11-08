@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Lock } from 'lucide-react';
 import type { ProfileResult, QuestionAnswers } from '@/lib/profileComputation';
 import { encodeProfileData } from '@/lib/profileComputation';
 
@@ -29,10 +28,26 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   };
 
   const lockedSections = [
-    'Your Therapeutic Approach',
-    'What This Means for Your Journey',
-    'Your Personalized Path Forward',
-    'How iVASA Can Help',
+    {
+      title: 'Your Therapeutic Approach',
+      teaser: "Discover why traditional 'just relax' advice doesn't work for your pattern - and what actually does.",
+      cta: 'Unlock to see your personalized clinical approach',
+    },
+    {
+      title: 'What This Means for Your Journey',
+      teaser: 'Learn how your specific pattern affects decision-making, relationships, and your capacity for rest.',
+      cta: 'Unlock to understand your deeper patterns',
+    },
+    {
+      title: 'Your Personalized Path Forward',
+      teaser: 'See the exact stages of therapeutic progression designed specifically for your inner landscape.',
+      cta: 'Unlock your therapeutic roadmap',
+    },
+    {
+      title: 'How iVASA Can Help You',
+      teaser: 'Discover how AI-powered therapeutic support addresses your specific pattern - available 24/7 when you need it most.',
+      cta: 'Start your journey today',
+    },
   ];
 
   return (
@@ -59,19 +74,20 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
           {lockedSections.map((section, index) => (
             <Card
               key={index}
-              className="p-8 relative overflow-hidden"
+              className="p-8 relative overflow-hidden cursor-pointer hover-elevate active-elevate-2"
+              onClick={() => document.getElementById('signup-button')?.scrollIntoView({ behavior: 'smooth' })}
               data-testid={`card-locked-section-${index}`}
             >
-              <div className="absolute inset-0 backdrop-blur-md bg-card/50 flex items-center justify-center z-10">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Lock className="w-5 h-5" />
-                  <span className="font-medium">Unlock with free account</span>
-                </div>
+              <div className="absolute inset-0 backdrop-blur-md bg-card/50 flex flex-col items-center justify-center z-10 p-8 text-center gap-3">
+                <div className="text-4xl opacity-60">🔒</div>
+                <p className="text-base text-muted-foreground max-w-md">{section.teaser}</p>
+                <span className="text-primary font-medium text-sm">[{section.cta}]</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">{section}</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-xl font-semibold mb-3">{section.title}</h3>
+              <p className="text-muted-foreground leading-relaxed">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua.
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat.
               </p>
             </Card>
           ))}
@@ -79,6 +95,7 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
 
         <div className="space-y-4 pt-4">
           <Button
+            id="signup-button"
             size="lg"
             className="w-full text-lg py-6 h-auto"
             onClick={handleSignup}
