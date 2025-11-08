@@ -21,10 +21,10 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-12">
         <div className="space-y-6">
           <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight" data-testid="heading-main">
-            Discover Your Inner Landscape
+            Discover Your Mental Health Answer
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto" data-testid="text-subheading">
-            A 2-minute assessment based on Pure Contextual Perception therapy - developed by a licensed therapist
+            5 Question Personalized Assessment with a clearer path to its Solution
           </p>
         </div>
 
@@ -46,10 +46,10 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           ].map((item, index) => (
             <div
               key={index}
-              className="flex items-center gap-3 text-muted-foreground justify-center md:justify-start"
+              className="flex items-start gap-3 text-muted-foreground justify-center md:justify-start"
               data-testid={`trust-signal-${index}`}
             >
-              <Check className="w-5 h-5 text-primary flex-shrink-0" />
+              <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
               <span className="text-base">{item}</span>
             </div>
           ))}
