@@ -12,7 +12,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(15, 15, 26, 0.85), rgba(15, 15, 26, 0.95)), url(${heroImage})`,
+          backgroundImage: `linear-gradient(to bottom, rgba(15, 15, 26, 0.4), rgba(15, 15, 26, 0.85)), url(${heroImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -22,7 +22,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight" data-testid="heading-main">
             Discover
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto" data-testid="text-subheading">
+          <p className="text-xl md:text-2xl text-foreground max-w-3xl mx-auto" data-testid="text-subheading">
              5 Question Assessment leads to affordable, adaptive, structured therapy sessions.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           ].map((item, index) => (
             <div
               key={index}
-              className="flex items-start gap-3 text-muted-foreground text-left"
+              className="flex items-start gap-3 text-foreground text-left"
               data-testid={`trust-signal-${index}`}
             >
               <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
