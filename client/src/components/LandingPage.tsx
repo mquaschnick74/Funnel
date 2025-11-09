@@ -32,12 +32,12 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           onClick={onStart}
           data-testid="button-start-assessment"
         >
-          Start Assessment
+          Ai-Powered Assessment
         </Button>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto pt-8">
           {[
             'Takes 90 seconds',
-            '1,000+ therapeutic sessions conducted',
+            '1,000+ Ai sessions conducted',
             'Based on 20+ years of clinical research',
             'Completely confidential',
           ].map((item, index) => (
