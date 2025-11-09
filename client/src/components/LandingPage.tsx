@@ -43,7 +43,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           ].map((item, index) => (
             <div
               key={index}
-              className="flex items-start gap-3 text-muted-foreground"
+              className="flex items-start gap-3 text-muted-foreground text-left"
               data-testid={`trust-signal-${index}`}
             >
               <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
