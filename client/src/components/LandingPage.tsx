@@ -17,7 +17,6 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           backgroundPosition: 'center',
         }}
       />
-
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-12">
         <div className="space-y-6">
           <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight" data-testid="heading-main">
@@ -27,7 +26,6 @@ export default function LandingPage({ onStart }: LandingPageProps) {
              A Single Personalized 5 Question Assessment leads the way to adaptive, structured therapy sessions.
           </p>
         </div>
-
         <Button
           size="lg"
           className="text-lg px-12 py-6 h-auto"
@@ -36,7 +34,6 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         >
           Start Assessment
         </Button>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto pt-8">
           {[
             'Takes 90 seconds',
@@ -46,7 +43,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           ].map((item, index) => (
             <div
               key={index}
-              className="flex items-start gap-3 text-muted-foreground justify-center md:justify-start"
+              className="flex items-start gap-3 text-muted-foreground"
               data-testid={`trust-signal-${index}`}
             >
               <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
