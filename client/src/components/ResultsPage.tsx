@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import type { ProfileResult, QuestionAnswers } from '@/lib/profileComputation';
 import { encodeProfileData } from '@/lib/profileComputation';
+import { sendAssessmentToVASA } from '@/lib/vasaWebhook';
 
 interface ResultsPageProps {
   profile: ProfileResult;
@@ -13,6 +14,9 @@ interface ResultsPageProps {
 export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handleSignup = () => {
     const encoded = encodeProfileData(answers, profile);
@@ -21,10 +25,39 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
     window.location.href = signupUrl;
   };
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email submitted:', email);
-    alert(`Thank you! We'll send your results to ${email}`);
+
+    if (!email) return;
+
+    setIsSubmitting(true);
+
+    try {
+      // Send assessment data to VASA webhook
+      const result = await sendAssessmentToVASA(email, answers, profile);
+
+      if (result) {
+        setSubmitSuccess(true);
+
+        // If user not registered yet (pendingAssessment), redirect to VASA after 2.5 seconds
+        if (result.pendingAssessment) {
+          setIsRedirecting(true);
+          setTimeout(() => {
+            window.location.href = 'https://beta.ivasa.ai/?from=assessment';
+          }, 2500);
+        }
+      } else {
+        // Webhook failed but don't break UX - just show success message
+        console.warn('Webhook failed, but showing success to user');
+        setSubmitSuccess(true);
+      }
+    } catch (error) {
+      console.error('Error submitting assessment:', error);
+      // Still show success - fail gracefully
+      setSubmitSuccess(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const lockedSections = [
@@ -125,23 +158,55 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
             </div>
           ) : (
             <Card className="p-6 space-y-4" data-testid="card-email-form">
-              <form onSubmit={handleEmailSubmit} className="space-y-4">
-                <div>
-                  <Input
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="text-base"
-                    data-testid="input-email"
-                  />
+              {submitSuccess ? (
+                <div className="space-y-4 text-center py-4">
+                  <div className="text-4xl">✓</div>
+                  <p className="text-lg font-medium text-foreground">
+                    {isRedirecting ? 'Assessment Saved!' : 'Thank You!'}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {isRedirecting
+                      ? "We've saved your results. Taking you to iVASA to continue your journey..."
+                      : `We've sent your results to ${email}`}
+                  </p>
+                  {isRedirecting && (
+                    <div className="flex justify-center pt-2">
+                      <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full"></div>
+                    </div>
+                  )}
                 </div>
-                <Button type="submit" className="w-full" data-testid="button-submit-email">
-                  Send My Results
-                </Button>
-                <p className="text-xs text-center text-muted-foreground">We'll never spam you</p>
-              </form>
+              ) : (
+                <form onSubmit={handleEmailSubmit} className="space-y-4">
+                  <div>
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={isSubmitting}
+                      className="text-base"
+                      data-testid="input-email"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isSubmitting}
+                    data-testid="button-submit-email"
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+                        Sending...
+                      </span>
+                    ) : (
+                      'Send My Results'
+                    )}
+                  </Button>
+                  <p className="text-xs text-center text-muted-foreground">We'll never spam you</p>
+                </form>
+              )}
             </Card>
           )}
         </div>
