@@ -31,17 +31,17 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
     {
       title: 'Your Therapeutic Approach',
       teaser: "Discover why traditional 'just relax' advice doesn't work for your pattern - and what actually does.",
-      cta: 'Unlock to see your personalized clinical approach',
+      cta: 'A personalized clinical approach',
     },
     {
       title: 'What This Means for Your Journey',
       teaser: 'Learn how your specific pattern affects decision-making, relationships, and your capacity for rest.',
-      cta: 'Unlock to understand your deeper patterns',
+      cta: 'Understand your deeper patterns',
     },
     {
       title: 'Your Personalized Path Forward',
       teaser: 'See the exact stages of therapeutic progression designed specifically for your inner landscape.',
-      cta: 'Unlock your therapeutic roadmap',
+      cta: 'Your individual therapeutic roadmap',
     },
     {
       title: 'How iVASA Can Help You',
