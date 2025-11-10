@@ -14,7 +14,7 @@ interface Question {
 const questions: Question[] = [
   {
     id: 'q1',
-    text: 'When you think about your anxiety, it feels like...',
+    text: 'If you think about your inner experience - when it feels difficult or unsettled - it is like...',
     choices: [
       { value: 'storm_on_horizon', text: 'A storm on the horizon - dark clouds gathering, electricity in the air' },
       { value: 'maze_of_mirrors', text: 'A maze of mirrors - endless reflections, hard to know which way is real' },
@@ -25,7 +25,7 @@ const questions: Question[] = [
   },
   {
     id: 'q2',
-    text: 'When facing two choices that both feel impossible, you typically...',
+    text: 'When you are caught between competing needs or contradictory feelings, you typically...',
     choices: [
       { value: 'stand_frozen', text: 'Stand frozen between them - unable to choose because both feel right and wrong' },
       {
@@ -40,7 +40,7 @@ const questions: Question[] = [
   },
   {
     id: 'q3',
-    text: 'In your daily life, worry or anxiety feels...',
+    text: 'In your daily life, the difficulty your are experiencing feels...',
     choices: [
       { value: 'almost_constant', text: 'Almost constant - like perpetual storms, the weather is always turbulent' },
       { value: 'sudden_intense', text: 'Sudden and intense - calm, then BOOM, overwhelming, then calm again' },
@@ -60,7 +60,7 @@ const questions: Question[] = [
   },
   {
     id: 'q4',
-    text: 'The idea of truly resting - like actually stopping and being still - feels...',
+    text: 'The idea of truly pausing - of stopping and just being with yourself - feels...',
     choices: [
       { value: 'impossible', text: "Impossible - you can't rest until everything is handled" },
       { value: 'dangerous', text: 'Dangerous - if you stop, something bad will happen' },
@@ -72,7 +72,7 @@ const questions: Question[] = [
   },
   {
     id: 'q5',
-    text: "If things could shift - if your relationship with anxiety could change - you'd most want...",
+    text: 'If things could shift - if your relationship with anxiety could change - you mostly want...',
     choices: [
       { value: 'body_calm', text: 'Your body to feel calm and settled - the ground beneath you steady' },
       { value: 'weather', text: "Emotions to pass through like weather - they come and go, but don't control you" },
