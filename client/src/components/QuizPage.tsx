@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import type { QuestionAnswers } from '@/lib/profileComputation';
+import heroImage from '@assets/generated_images/Hero_landscape_background_image_1a3148b4.png';
 
 interface Question {
   id: string;
@@ -121,8 +122,16 @@ export default function QuizPage({ onComplete }: QuizPageProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-      <div className="max-w-3xl w-full space-y-8">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(15, 15, 26, 0.4), rgba(15, 15, 26, 0.85)), url(${heroImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <div className="max-w-3xl w-full space-y-8 relative z-10">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span data-testid="text-brand">iVASA Assessment</span>
