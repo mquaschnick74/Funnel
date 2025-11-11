@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import type { ProfileResult, QuestionAnswers } from '@/lib/profileComputation';
 import { encodeProfileData } from '@/lib/profileComputation';
-import { useIframeMessaging } from '@/hooks/useIframeMessaging';
 
 interface ResultsPageProps {
   profile: ProfileResult;
@@ -14,14 +13,40 @@ interface ResultsPageProps {
 export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState('');
-  const { isInIframe, sendMessage } = useIframeMessaging();
+  const [isInIframe, setIsInIframe] = useState(false);
+
+  // Detect if we're in an iframe
+  useEffect(() => {
+    const inIframe = window.parent !== window;
+    setIsInIframe(inIframe);
+
+    // Log for debugging
+    console.log('🔍 [QUIZ] iFrame detection:', {
+      isInIframe: inIframe,
+      parent: window.parent,
+      current: window,
+      origin: window.location.origin
+    });
+
+    // Send ready message if in iframe
+    if (inIframe) {
+      console.log('📤 [QUIZ] Sending IFRAME_READY message');
+      window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
+    }
+  }, []);
 
   const handleSignup = () => {
     const encoded = encodeProfileData(answers, profile);
 
+    console.log('🚀 [QUIZ] Signup button clicked');
+    console.log('🚀 [QUIZ] isInIframe:', isInIframe);
+    console.log('🚀 [QUIZ] Data:', { encoded, profile, answers });
+
     if (isInIframe) {
-      // Send assessment data to parent window
-      sendMessage({
+      // Send message to parent window
+      console.log('📤 [QUIZ] Sending ASSESSMENT_COMPLETE message to parent');
+
+      const message = {
         type: 'ASSESSMENT_COMPLETE',
         data: {
           encoded,
@@ -29,9 +54,16 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
           answers,
           action: 'signup'
         }
-      });
+      };
+
+      window.parent.postMessage(message, '*');
+      console.log('✅ [QUIZ] Message sent:', message);
+
+      // Show feedback to user
+      alert('Assessment complete! Redirecting to signup...');
     } else {
       // Direct navigation when not in iframe
+      console.log('🔗 [QUIZ] Not in iframe, navigating directly');
       const signupUrl = `https://beta.ivasa.ai/signup?source=assessment&profile=${encoded}`;
       window.location.href = signupUrl;
     }
@@ -40,10 +72,22 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    console.log('📧 [QUIZ] Email form submitted');
+    console.log('📧 [QUIZ] Email:', email);
+    console.log('📧 [QUIZ] isInIframe:', isInIframe);
+
+    if (!email) {
+      alert('Please enter your email address');
+      return;
+    }
+
     if (isInIframe) {
-      // Send email capture to parent
+      // Send message to parent window
       const encoded = encodeProfileData(answers, profile);
-      sendMessage({
+
+      console.log('📤 [QUIZ] Sending email capture message to parent');
+
+      const message = {
         type: 'ASSESSMENT_COMPLETE',
         data: {
           encoded,
@@ -52,9 +96,17 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
           email,
           action: 'email_capture'
         }
-      });
+      };
+
+      window.parent.postMessage(message, '*');
+      console.log('✅ [QUIZ] Email message sent:', message);
+
+      // Show feedback
+      alert(`Thank you! We'll send your results to ${email}`);
+      setShowEmailForm(false);
     } else {
-      console.log('Email submitted:', email);
+      // Handle directly
+      console.log('📧 [QUIZ] Not in iframe, handling locally');
       alert(`Thank you! We'll send your results to ${email}`);
     }
   };
@@ -85,6 +137,13 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="max-w-3xl w-full space-y-8">
+        {/* Debug info - remove in production */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="bg-yellow-100 text-black p-2 rounded text-xs">
+            Debug: isInIframe = {String(isInIframe)}, Origin = {window.location.origin}
+          </div>
+        )}
+
         <div className="space-y-6">
           <h1 className="text-4xl font-bold text-foreground" data-testid="heading-pattern">
             Your Pattern: {profile.pattern}
@@ -144,6 +203,7 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
               className="w-full text-lg py-6"
               onClick={handleSignup}
               data-testid="button-create-account"
+              type="button"
             >
               Create Free Account to See Your Complete Profile
             </Button>
@@ -156,6 +216,7 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
                   onClick={() => setShowEmailForm(true)}
                   className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
                   data-testid="button-email-instead"
+                  type="button"
                 >
                   Maybe Later - Just Email Me My Results
                 </button>
