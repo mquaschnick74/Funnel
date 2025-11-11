@@ -5,8 +5,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import AssessmentFlow from "@/pages/AssessmentFlow";
 import NotFound from "@/pages/not-found";
+import { useIframeMessaging } from "@/hooks/useIframeMessaging";
 
 function Router() {
+  // Initialize iframe messaging
+  useIframeMessaging();
+
   return (
     <Switch>
       <Route path="/" component={AssessmentFlow} />
