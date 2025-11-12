@@ -16,6 +16,14 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: false }));
 
+// Allow iframe embedding from any domain
+app.use((req, res, next) => {
+  // Modern CSP header - works in all browsers
+  res.setHeader('Content-Security-Policy', "frame-ancestors *");
+  // Don't set X-Frame-Options - let CSP handle it
+  next();
+});
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
