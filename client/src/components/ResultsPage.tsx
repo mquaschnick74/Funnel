@@ -20,9 +20,29 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
 
   const handleSignup = () => {
     const encoded = encodeProfileData(answers, profile);
-    const signupUrl = `https://beta.ivasa.ai/signup?source=assessment&profile=${encoded}`;
-    console.log('Redirecting to:', signupUrl);
-    window.location.href = signupUrl;
+
+    // Check if we're in an iframe
+    const isInIframe = window.parent !== window;
+
+    if (isInIframe) {
+      // Send message to parent window
+      console.log('📤 [QUIZ] Sending ASSESSMENT_COMPLETE message');
+      window.parent.postMessage({
+        type: 'ASSESSMENT_COMPLETE',
+        data: {
+          encoded,
+          profile,
+          answers
+        }
+      }, '*');
+
+      alert('Assessment complete! Redirecting to signup...');
+    } else {
+      // Standalone mode - just redirect
+      const signupUrl = `https://beta.ivasa.ai/signup?source=assessment&profile=${encoded}`;
+      console.log('Redirecting to:', signupUrl);
+      window.location.href = signupUrl;
+    }
   };
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
@@ -30,6 +50,26 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
 
     if (!email) return;
 
+    const isInIframe = window.parent !== window;
+
+    if (isInIframe) {
+      // Send email capture message to parent
+      console.log('📤 [QUIZ] Sending EMAIL_CAPTURE message');
+      window.parent.postMessage({
+        type: 'EMAIL_CAPTURE',
+        data: {
+          email,
+          encoded: encodeProfileData(answers, profile),
+          profile,
+          answers
+        }
+      }, '*');
+
+      setSubmitSuccess(true);
+      return;
+    }
+
+    // Standalone mode - use webhook
     setIsSubmitting(true);
 
     try {
