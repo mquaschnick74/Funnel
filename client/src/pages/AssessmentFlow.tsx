@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LandingPage from '@/components/LandingPage';
 import QuizPage from '@/components/QuizPage';
 import LoadingScreen from '@/components/LoadingScreen';
@@ -11,6 +11,14 @@ export default function AssessmentFlow() {
   const [step, setStep] = useState<FlowStep>('landing');
   const [answers, setAnswers] = useState<QuestionAnswers>({});
   const [profile, setProfile] = useState<ProfileResult | null>(null);
+
+  // Signal parent window when app is ready (for iframe embedding)
+  useEffect(() => {
+    if (window.parent !== window) {
+      console.log('[iVASA] App loaded in iframe, signaling parent...');
+      window.parent.postMessage({ type: 'IVASA_READY', timestamp: Date.now() }, '*');
+    }
+  }, []);
 
   const handleStart = () => {
     setStep('quiz');
