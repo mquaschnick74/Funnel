@@ -16,6 +16,9 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   const [email, setEmail] = useState('');
   const [isInIframe, setIsInIframe] = useState(false);
 
+  // Check if quiz was entirely skipped (no answers provided)
+  const isQuizSkipped = !answers.q1 && !answers.q2 && !answers.q3 && !answers.q4 && !answers.q5;
+
   // Detect if we're in an iframe
   useEffect(() => {
     const inIframe = window.parent !== window;
@@ -131,69 +134,104 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
           </div>
         )}
 
-        {/* Header Section - More Prominent */}
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-4">
-            <Sparkles className="w-4 h-4" />
-            Assessment Complete
-          </div>
-          <h1 
-            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent leading-tight"
-            data-testid="heading-pattern"
-          >
-            Your Pattern: {profile.pattern}
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Here's what we discovered about your inner landscape
-          </p>
-        </div>
+        {isQuizSkipped ? (
+          /* Simplified view when quiz is skipped */
+          <>
+            {/* Header Section for Skipped Quiz */}
+            <div className="text-center space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-4">
+                <Sparkles className="w-4 h-4" />
+                Your Journey Awaits
+              </div>
+              <h1
+                className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent leading-tight"
+                data-testid="heading-pattern"
+              >
+                Begin Your Journey
+              </h1>
+            </div>
 
-        {/* Main Profile Card - Enhanced with gradient */}
-        <Card 
-          className="relative overflow-hidden border-emerald-500/20 bg-gradient-to-br from-card via-card to-emerald-950/10"
-          data-testid="card-visible-profile"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
-
-          <div className="relative p-8 md:p-10 space-y-6">
-            <div className="flex items-start gap-3 group">
-              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-              <p className="text-lg md:text-xl leading-relaxed">
-                You experience anxiety as <span className="text-emerald-400 font-semibold">{profile.description}</span>.
+            {/* Simple Message Card for Skipped Quiz */}
+            <Card
+              className="relative overflow-hidden border-emerald-500/20 bg-gradient-to-br from-card via-card to-emerald-950/10"
+              data-testid="card-visible-profile"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
+              <div className="relative p-8 md:p-10">
+                <p className="text-lg md:text-xl leading-relaxed text-center">
+                  Your journey is unique, and so is your path forward. Let our AI therapeutic guides help you discover your inner landscape through deeply meaningful conversation.
+                </p>
+              </div>
+            </Card>
+          </>
+        ) : (
+          /* Full enhanced view when quiz is completed */
+          <>
+            {/* Header Section - More Prominent */}
+            <div className="text-center space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-4">
+                <Sparkles className="w-4 h-4" />
+                Assessment Complete
+              </div>
+              <h1
+                className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent leading-tight"
+                data-testid="heading-pattern"
+              >
+                Your Pattern: {profile.pattern}
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Here's what we discovered about your inner landscape
               </p>
             </div>
 
-            <div className="flex items-start gap-3 group">
-              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-              <p className="text-lg md:text-xl leading-relaxed">
-                When facing difficult choices, <span className="text-emerald-400 font-semibold">{profile.cvdcPattern}</span>. This creates a particular kind of exhaustion - the paralysis of contradictions.
-              </p>
-            </div>
+            {/* Main Profile Card - Enhanced with gradient */}
+            <Card
+              className="relative overflow-hidden border-emerald-500/20 bg-gradient-to-br from-card via-card to-emerald-950/10"
+              data-testid="card-visible-profile"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
 
-            <div className="flex items-start gap-3 group">
-              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-              <p className="text-lg md:text-xl leading-relaxed">
-                {profile.chronicity}
-              </p>
-            </div>
+              <div className="relative p-8 md:p-10 space-y-6">
+                <div className="flex items-start gap-3 group">
+                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+                  <p className="text-lg md:text-xl leading-relaxed">
+                    You experience anxiety as <span className="text-emerald-400 font-semibold">{profile.description}</span>.
+                  </p>
+                </div>
 
-            <div className="flex items-start gap-3 group">
-              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-              <p className="text-lg md:text-xl leading-relaxed">
-                <span className="text-emerald-400 font-semibold">{profile.restCapacity}</span>
-              </p>
-            </div>
+                <div className="flex items-start gap-3 group">
+                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+                  <p className="text-lg md:text-xl leading-relaxed">
+                    When facing difficult choices, <span className="text-emerald-400 font-semibold">{profile.cvdcPattern}</span>. This creates a particular kind of exhaustion - the paralysis of contradictions.
+                  </p>
+                </div>
 
-            <div className="flex items-start gap-3 group">
-              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-              <p className="text-lg md:text-xl leading-relaxed">
-                <span className="text-emerald-400 font-semibold">{profile.goal}</span>
-              </p>
-            </div>
-          </div>
-        </Card>
+                <div className="flex items-start gap-3 group">
+                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+                  <p className="text-lg md:text-xl leading-relaxed">
+                    {profile.chronicity}
+                  </p>
+                </div>
 
-        {/* Guide Preview Section */}
+                <div className="flex items-start gap-3 group">
+                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+                  <p className="text-lg md:text-xl leading-relaxed">
+                    <span className="text-emerald-400 font-semibold">{profile.restCapacity}</span>
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 group">
+                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+                  <p className="text-lg md:text-xl leading-relaxed">
+                    <span className="text-emerald-400 font-semibold">{profile.goal}</span>
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </>
+        )}
+
+        {/* Guide Preview Section - Shown for both skipped and completed */}
         <div className="space-y-6">
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
@@ -300,10 +338,10 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
                   className="w-full border-emerald-500/30 focus:border-emerald-500"
                   data-testid="input-email"
                 />
-                <Button 
-                  type="submit" 
-                  variant="secondary" 
-                  className="w-full border-emerald-500/30 hover:border-emerald-500" 
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  className="w-full border-emerald-500/30 hover:border-emerald-500"
                   data-testid="button-submit-email"
                 >
                   Send My Results
