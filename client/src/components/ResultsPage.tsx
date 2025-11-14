@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import type { ProfileResult, QuestionAnswers } from '@/lib/profileComputation';
 import { encodeProfileData } from '@/lib/profileComputation';
+import { ChevronRight, Sparkles } from 'lucide-react';
 
 interface ResultsPageProps {
   profile: ProfileResult;
@@ -20,7 +21,6 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
     const inIframe = window.parent !== window;
     setIsInIframe(inIframe);
 
-    // Log for debugging
     console.log('🔍 [QUIZ] iFrame detection:', {
       isInIframe: inIframe,
       parent: window.parent,
@@ -28,7 +28,6 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
       origin: window.location.origin
     });
 
-    // Send ready message if in iframe
     if (inIframe) {
       console.log('📤 [QUIZ] Sending IFRAME_READY message');
       window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
@@ -43,7 +42,6 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
     console.log('🚀 [QUIZ] Data:', { encoded, profile, answers });
 
     if (isInIframe) {
-      // Send message to parent window
       console.log('📤 [QUIZ] Sending ASSESSMENT_COMPLETE message to parent');
 
       const message = {
@@ -59,10 +57,8 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
       window.parent.postMessage(message, '*');
       console.log('✅ [QUIZ] Message sent:', message);
 
-      // Show feedback to user
       alert('Assessment complete! Redirecting to signup...');
     } else {
-      // Direct navigation when not in iframe
       console.log('🔗 [QUIZ] Not in iframe, navigating directly');
       const signupUrl = `https://beta.ivasa.ai/signup?source=assessment&profile=${encoded}`;
       window.location.href = signupUrl;
@@ -82,7 +78,6 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
     }
 
     if (isInIframe) {
-      // Send message to parent window
       const encoded = encodeProfileData(answers, profile);
 
       console.log('📤 [QUIZ] Sending email capture message to parent');
@@ -101,32 +96,34 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
       window.parent.postMessage(message, '*');
       console.log('✅ [QUIZ] Email message sent:', message);
 
-      // Show feedback
       alert(`Thank you! We'll send your results to ${email}`);
       setShowEmailForm(false);
     } else {
-      // Handle directly
       console.log('📧 [QUIZ] Not in iframe, handling locally');
       alert(`Thank you! We'll send your results to ${email}`);
     }
   };
 
-  const lockedSections = [
+  const guidePreviews = [
     {
-      title: 'Your Therapeutic Approach',
-      teaser: "Discover why traditional 'just relax' advice doesn't work for your pattern - and what actually does.",
-      cta: 'Unlock to see your personalized clinical approach',
+      name: 'Sarah',
+      title: 'Your Emotional Support Guide',
+      description: "Discover how Sarah's warm, nurturing approach helps you explore feelings without judgment, building trust through compassionate listening.",
+      image: '/agents/sarah.jpg',
+      gradient: 'from-purple-900/20 via-purple-800/10 to-transparent'
     },
     {
-      title: 'What This Means for Your Journey',
-      teaser: 'Learn how your specific pattern affects decision-making, relationships, and your capacity for rest.',
-      cta: 'Unlock to understand your deeper patterns',
-    },
+      name: 'Mathew',
+      title: 'Your Deep Analysis Guide',
+      description: "Learn how Mathew's analytical approach uncovers root causes and unconscious patterns, facilitating profound insights that lead to lasting transformation.",
+      image: '/agents/mathew.jpg',
+      gradient: 'from-emerald-900/20 via-emerald-800/10 to-transparent'
+    }
   ];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-      <div className="max-w-3xl w-full space-y-8">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-emerald-950/10 flex flex-col items-center justify-center px-4 py-12">
+      <div className="max-w-4xl w-full space-y-12">
         {/* Debug info - remove in production */}
         {process.env.NODE_ENV === 'development' && (
           <div className="bg-yellow-100 text-black p-2 rounded text-xs">
@@ -134,96 +131,185 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
           </div>
         )}
 
-        <div className="space-y-6">
-          <h1 className="text-4xl font-bold text-foreground" data-testid="heading-pattern">
+        {/* Header Section - More Prominent */}
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-4">
+            <Sparkles className="w-4 h-4" />
+            Assessment Complete
+          </div>
+          <h1 
+            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent leading-tight"
+            data-testid="heading-pattern"
+          >
             Your Pattern: {profile.pattern}
           </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Here's what we discovered about your inner landscape
+          </p>
+        </div>
 
-          <Card className="p-8 space-y-4" data-testid="card-visible-profile">
-            <p className="text-lg leading-relaxed">
-              You experience anxiety as <span className="text-foreground font-medium">{profile.description}</span>.
-            </p>
-            <p className="text-lg leading-relaxed">
-              When facing difficult choices, <span className="text-foreground font-medium">{profile.cvdcPattern}</span>
-              . This creates a particular kind of exhaustion - the paralysis of contradictions.
-            </p>
-            <p className="text-lg leading-relaxed">
-              {profile.chronicity}
-            </p>
-            <p className="text-lg leading-relaxed">
-              <span className="text-foreground font-medium">{profile.restCapacity}</span>
-            </p>
-            <p className="text-lg leading-relaxed">
-              <span className="text-foreground font-medium">{profile.goal}</span>
-            </p>
-          </Card>
+        {/* Main Profile Card - Enhanced with gradient */}
+        <Card 
+          className="relative overflow-hidden border-emerald-500/20 bg-gradient-to-br from-card via-card to-emerald-950/10"
+          data-testid="card-visible-profile"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
 
-          <div className="space-y-4">
-            {lockedSections.map((section, index) => (
+          <div className="relative p-8 md:p-10 space-y-6">
+            <div className="flex items-start gap-3 group">
+              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+              <p className="text-lg md:text-xl leading-relaxed">
+                You experience anxiety as <span className="text-emerald-400 font-semibold">{profile.description}</span>.
+              </p>
+            </div>
+
+            <div className="flex items-start gap-3 group">
+              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+              <p className="text-lg md:text-xl leading-relaxed">
+                When facing difficult choices, <span className="text-emerald-400 font-semibold">{profile.cvdcPattern}</span>. This creates a particular kind of exhaustion - the paralysis of contradictions.
+              </p>
+            </div>
+
+            <div className="flex items-start gap-3 group">
+              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+              <p className="text-lg md:text-xl leading-relaxed">
+                {profile.chronicity}
+              </p>
+            </div>
+
+            <div className="flex items-start gap-3 group">
+              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+              <p className="text-lg md:text-xl leading-relaxed">
+                <span className="text-emerald-400 font-semibold">{profile.restCapacity}</span>
+              </p>
+            </div>
+
+            <div className="flex items-start gap-3 group">
+              <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
+              <p className="text-lg md:text-xl leading-relaxed">
+                <span className="text-emerald-400 font-semibold">{profile.goal}</span>
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        {/* Guide Preview Section */}
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Meet Your AI Therapeutic Guides
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Create a free account to start your first session with either guide
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {guidePreviews.map((guide, index) => (
               <Card
                 key={index}
-                className="p-8 relative overflow-hidden"
-                style={{
-                  background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01))',
-                }}
-                data-testid={`card-locked-${index}`}
+                className="group relative overflow-hidden border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 cursor-pointer hover:scale-[1.02]"
+                data-testid={`card-guide-${index}`}
               >
-                <div className="relative z-10">
-                  <h3 className="text-xl font-semibold mb-3 text-muted-foreground">{section.title}</h3>
-                  <p className="text-muted-foreground mb-4 opacity-70">{section.teaser}</p>
-                  <span className="text-sm text-muted-foreground italic">{section.cta}</span>
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                  <img
+                    src={guide.image}
+                    alt={guide.name}
+                    className="w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-300"
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${guide.gradient}`} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
                 </div>
-                <div
-                  className="absolute inset-0 backdrop-blur-sm"
-                  style={{
-                    background:
-                      'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.02) 10px, rgba(255, 255, 255, 0.02) 20px)',
-                  }}
-                />
+
+                {/* Content */}
+                <div className="relative p-8 min-h-[280px] flex flex-col justify-end">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-medium mb-3 w-fit">
+                    AI Guide
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
+                    {guide.name}
+                    <ChevronRight className="w-5 h-5 text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                  </h3>
+
+                  <p className="text-emerald-400 font-semibold mb-3">
+                    {guide.title}
+                  </p>
+
+                  <p className="text-muted-foreground leading-relaxed">
+                    {guide.description}
+                  </p>
+                </div>
               </Card>
             ))}
           </div>
+        </div>
 
-          <div className="space-y-6 pt-8">
+        {/* CTA Section - More Prominent */}
+        <div className="space-y-6 pt-4">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-emerald-400/20 to-emerald-500/20 blur-3xl opacity-30" />
             <Button
               size="lg"
-              className="w-full text-lg py-6"
+              className="relative w-full text-lg py-7 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 shadow-lg shadow-emerald-500/25 border border-emerald-400/30"
               onClick={handleSignup}
               data-testid="button-create-account"
               type="button"
             >
-              Create Free Account to See Your Complete Profile
+              <span className="flex items-center gap-2">
+                Create Free Account to See Your Complete Profile
+                <ChevronRight className="w-5 h-5" />
+              </span>
             </Button>
+          </div>
 
-            <p className="text-center text-muted-foreground text-sm">Takes 30 seconds • Start your first session today</p>
+          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Takes 30 seconds
+            </span>
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Start your first session today
+            </span>
+          </div>
 
-            <div className="text-center pt-4">
-              {!showEmailForm ? (
-                <button
-                  onClick={() => setShowEmailForm(true)}
-                  className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
-                  data-testid="button-email-instead"
-                  type="button"
+          <div className="text-center pt-4">
+            {!showEmailForm ? (
+              <button
+                onClick={() => setShowEmailForm(true)}
+                className="text-sm text-muted-foreground hover:text-emerald-400 underline transition-colors"
+                data-testid="button-email-instead"
+                type="button"
+              >
+                Maybe Later - Just Email Me My Results
+              </button>
+            ) : (
+              <form onSubmit={handleEmailSubmit} className="max-w-md mx-auto space-y-3">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full border-emerald-500/30 focus:border-emerald-500"
+                  data-testid="input-email"
+                />
+                <Button 
+                  type="submit" 
+                  variant="secondary" 
+                  className="w-full border-emerald-500/30 hover:border-emerald-500" 
+                  data-testid="button-submit-email"
                 >
-                  Maybe Later - Just Email Me My Results
-                </button>
-              ) : (
-                <form onSubmit={handleEmailSubmit} className="max-w-md mx-auto space-y-3">
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full"
-                    data-testid="input-email"
-                  />
-                  <Button type="submit" variant="secondary" className="w-full" data-testid="button-submit-email">
-                    Send My Results
-                  </Button>
-                </form>
-              )}
-            </div>
+                  Send My Results
+                </Button>
+              </form>
+            )}
           </div>
         </div>
       </div>
