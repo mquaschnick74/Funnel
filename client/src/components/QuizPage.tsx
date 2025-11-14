@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { X } from 'lucide-react';
 import type { QuestionAnswers } from '@/lib/profileComputation';
 import heroImage from '@assets/generated_images/Hero_landscape_background_image_1a3148b4.png';
 
@@ -121,6 +122,11 @@ export default function QuizPage({ onComplete }: QuizPageProps) {
     }
   };
 
+  const handleSkipEntireQuiz = () => {
+    // Complete with empty answers - all questions skipped
+    onComplete({});
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
       <div
@@ -131,6 +137,17 @@ export default function QuizPage({ onComplete }: QuizPageProps) {
           backgroundPosition: 'center',
         }}
       />
+
+      {/* Skip entire quiz button */}
+      <button
+        onClick={handleSkipEntireQuiz}
+        className="absolute top-4 right-4 z-20 p-2 rounded-full hover:bg-white/10 transition-colors"
+        aria-label="Skip entire quiz"
+        data-testid="button-skip-quiz"
+      >
+        <X className="w-6 h-6 text-white" strokeWidth={2} />
+      </button>
+
       <div className="max-w-3xl w-full space-y-8 relative z-10">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
