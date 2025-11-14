@@ -15,6 +15,9 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   const [email, setEmail] = useState('');
   const [isInIframe, setIsInIframe] = useState(false);
 
+  // Check if quiz was entirely skipped (no answers provided)
+  const isQuizSkipped = !answers.q1 && !answers.q2 && !answers.q3 && !answers.q4 && !answers.q5;
+
   // Detect if we're in an iframe
   useEffect(() => {
     const inIframe = window.parent !== window;
@@ -135,28 +138,44 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
         )}
 
         <div className="space-y-6">
-          <h1 className="text-4xl font-bold text-foreground" data-testid="heading-pattern">
-            Your Pattern: {profile.pattern}
-          </h1>
+          {isQuizSkipped ? (
+            <>
+              <h1 className="text-4xl font-bold text-foreground" data-testid="heading-pattern">
+                Your Journey Awaits
+              </h1>
 
-          <Card className="p-8 space-y-4" data-testid="card-visible-profile">
-            <p className="text-lg leading-relaxed">
-              You experience anxiety as <span className="text-foreground font-medium">{profile.description}</span>.
-            </p>
-            <p className="text-lg leading-relaxed">
-              When facing difficult choices, <span className="text-foreground font-medium">{profile.cvdcPattern}</span>
-              . This creates a particular kind of exhaustion - the paralysis of contradictions.
-            </p>
-            <p className="text-lg leading-relaxed">
-              {profile.chronicity}
-            </p>
-            <p className="text-lg leading-relaxed">
-              <span className="text-foreground font-medium">{profile.restCapacity}</span>
-            </p>
-            <p className="text-lg leading-relaxed">
-              <span className="text-foreground font-medium">{profile.goal}</span>
-            </p>
-          </Card>
+              <Card className="p-8 space-y-4" data-testid="card-visible-profile">
+                <p className="text-lg leading-relaxed text-foreground">
+                  Your journey is unique, and so is your path forward. Let our AI therapeutic guides help you discover your inner landscape through deeply meaningful conversation.
+                </p>
+              </Card>
+            </>
+          ) : (
+            <>
+              <h1 className="text-4xl font-bold text-foreground" data-testid="heading-pattern">
+                Your Pattern: {profile.pattern}
+              </h1>
+
+              <Card className="p-8 space-y-4" data-testid="card-visible-profile">
+                <p className="text-lg leading-relaxed">
+                  You experience anxiety as <span className="text-foreground font-medium">{profile.description}</span>.
+                </p>
+                <p className="text-lg leading-relaxed">
+                  When facing difficult choices, <span className="text-foreground font-medium">{profile.cvdcPattern}</span>
+                  . This creates a particular kind of exhaustion - the paralysis of contradictions.
+                </p>
+                <p className="text-lg leading-relaxed">
+                  {profile.chronicity}
+                </p>
+                <p className="text-lg leading-relaxed">
+                  <span className="text-foreground font-medium">{profile.restCapacity}</span>
+                </p>
+                <p className="text-lg leading-relaxed">
+                  <span className="text-foreground font-medium">{profile.goal}</span>
+                </p>
+              </Card>
+            </>
+          )}
 
           <div className="space-y-4">
             {lockedSections.map((section, index) => (
