@@ -122,16 +122,6 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
       teaser: 'Learn how your specific pattern affects decision-making, relationships, and your capacity for rest.',
       cta: 'Unlock to understand your deeper patterns',
     },
-    {
-      title: 'Your Personalized Path Forward',
-      teaser: 'See the exact stages of therapeutic progression designed specifically for your inner landscape.',
-      cta: 'Unlock your therapeutic roadmap',
-    },
-    {
-      title: 'How iVASA Can Help You',
-      teaser: 'Discover how AI-powered therapeutic support addresses your specific pattern - available 24/7 when you need it most.',
-      cta: 'Start your journey today',
-    },
   ];
 
   return (
@@ -181,10 +171,7 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
                 <div className="relative z-10">
                   <h3 className="text-xl font-semibold mb-3 text-muted-foreground">{section.title}</h3>
                   <p className="text-muted-foreground mb-4 opacity-70">{section.teaser}</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 opacity-50">🔒</div>
-                    <span className="text-sm text-muted-foreground italic">{section.cta}</span>
-                  </div>
+                  <span className="text-sm text-muted-foreground italic">{section.cta}</span>
                 </div>
                 <div
                   className="absolute inset-0 backdrop-blur-sm"
