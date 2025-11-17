@@ -33,19 +33,10 @@ export class WeeklyRecapService {
     try {
       console.log('🔍 Finding users needing recaps...');
 
-      // Query users with email preferences enabled
+      // First get email preferences
       const { data: prefsData, error: prefsError } = await supabase
         .from('user_email_preferences')
-        .select(`
-          user_id,
-          preferred_meditation_voice,
-          meditation_rotation_state,
-          last_recap_sent_at,
-          user_profiles!inner (
-            email,
-            first_name
-          )
-        `)
+        .select('*')
         .eq('weekly_recap_enabled', true);
 
       if (prefsError) {
@@ -53,9 +44,35 @@ export class WeeklyRecapService {
         return [];
       }
 
+      if (!prefsData || prefsData.length === 0) {
+        console.log('No users with weekly_recap_enabled found');
+        return [];
+      }
+
+      // Get user profiles separately
+      const userIds = prefsData.map(p => p.user_id);
+      const { data: profiles, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('id, email, first_name')
+        .in('id', userIds);
+
+      if (profileError) {
+        console.error('Error fetching profiles:', profileError);
+        return [];
+      }
+
+      // Create a map of user profiles
+      const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+
       const usersNeedingRecap: UserNeedingRecap[] = [];
 
-      for (const pref of prefsData || []) {
+      for (const pref of prefsData) {
+        // Get user profile from map
+        const profile = profileMap.get(pref.user_id);
+        if (!profile) {
+          console.log(`⏭️  Skipping user ${pref.user_id}: No profile found`);
+          continue;
+        }
         // Check if we sent a recap in the last 3 days
         if (pref.last_recap_sent_at) {
           const daysSinceLastRecap = Math.floor(
@@ -92,15 +109,10 @@ export class WeeklyRecapService {
           (!lastSession && daysSinceLastSession >= 7);
 
         if (needsRecap) {
-          // Handle user_profiles which may be an object or array depending on Supabase response
-          const userProfile = Array.isArray(pref.user_profiles)
-            ? pref.user_profiles[0]
-            : pref.user_profiles;
-
           usersNeedingRecap.push({
             user_id: pref.user_id,
-            email: userProfile.email,
-            first_name: userProfile.first_name || 'there',
+            email: profile.email,
+            first_name: profile.first_name || 'there',
             last_session_date: lastSession?.start_time || null,
             days_since_last_session: daysSinceLastSession,
             preferred_meditation_voice: pref.preferred_meditation_voice || 'sarah',
