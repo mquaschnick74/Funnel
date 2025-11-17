@@ -26,7 +26,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             data-testid="heading-main"
           />
           <p className="text-xl md:text-2xl text-foreground max-w-3xl mx-auto" data-testid="text-subheading">
-             5 Question Assessment leads to affordable, adaptive, structured therapy sessions.
+             5 Questions: Affordable → Adaptive → Structured...
           </p>
         </div>
         <Button
