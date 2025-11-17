@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
-import OpenAI from 'openai';
 import fs from 'fs';
 import path from 'path';
 
@@ -11,7 +10,6 @@ const supabase = createClient(
 );
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 interface UserNeedingRecap {
   user_id: string;
@@ -124,93 +122,6 @@ export class WeeklyRecapService {
   }
 
   /**
-   * Generate a human-friendly therapeutic summary using OpenAI
-   */
-  async generateRecapSummary(userId: string, firstName: string): Promise<string> {
-    try {
-      console.log(`📝 Generating summary for user ${userId}...`);
-
-      // Fetch last 3 sessions
-      const { data: sessions } = await supabase
-        .from('therapeutic_sessions')
-        .select('*')
-        .eq('user_id', userId)
-        .order('start_time', { ascending: false })
-        .limit(3);
-
-      // Fetch recent CSS patterns
-      const { data: patterns } = await supabase
-        .from('css_patterns')
-        .select('*')
-        .in('call_id', sessions?.map(s => s.call_id) || [])
-        .order('detected_at', { ascending: false })
-        .limit(10);
-
-      // Fetch therapeutic context
-      const { data: contexts } = await supabase
-        .from('therapeutic_context')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(5);
-
-      // Build context for OpenAI
-      const contextData = {
-        sessionCount: sessions?.length || 0,
-        recentPatterns: patterns?.map(p => ({
-          stage: p.stage,
-          register: p.register,
-          confidence: p.confidence
-        })) || [],
-        insights: contexts?.map(c => c.content) || []
-      };
-
-      // Generate summary with OpenAI
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content: `You are a warm, insightful therapist writing a weekly check-in email to a client.
-
-Your goal is to:
-- Acknowledge their recent therapeutic work
-- Highlight patterns or themes you've noticed
-- Offer gentle, actionable insights
-- Encourage continued growth
-- Use warm, human language (NOT technical jargon)
-
-Write in 2nd person ("you"). Be concise (200-300 words). Format with 2-3 short paragraphs.`
-          },
-          {
-            role: 'user',
-            content: `Write a weekly therapeutic recap for ${firstName} based on this data:
-
-Sessions this week: ${contextData.sessionCount}
-Recent patterns: ${JSON.stringify(contextData.recentPatterns, null, 2)}
-Key insights: ${contextData.insights.join('; ')}
-
-Create a warm, personalized message.`
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 500
-      });
-
-      const summary = completion.choices[0].message.content ||
-        `Hi ${firstName},\n\nI wanted to check in with you this week. Your recent sessions show meaningful engagement with your therapeutic journey. Keep showing up for yourself—that's where the real growth happens.\n\nLooking forward to our continued work together.`;
-
-      console.log(`✅ Generated summary for ${firstName}`);
-      return summary;
-
-    } catch (error) {
-      console.error('❌ Error generating summary:', error);
-      // Return fallback summary
-      return `Hi ${firstName},\n\nI hope this message finds you well. I wanted to check in and acknowledge the therapeutic work you've been doing. Remember that growth happens gradually, and every session is a step forward.\n\nTake care of yourself this week.`;
-    }
-  }
-
-  /**
    * Select next meditation file based on rotation
    */
   selectMeditationFile(user: UserNeedingRecap): { type: string; path: string } {
@@ -248,7 +159,7 @@ Create a warm, personalized message.`
   /**
    * Send recap email with meditation attachment
    */
-  async sendRecapEmail(user: UserNeedingRecap, summary: string): Promise<boolean> {
+  async sendRecapEmail(user: UserNeedingRecap): Promise<boolean> {
     try {
       console.log(`📧 Sending recap email to ${user.email}...`);
 
@@ -270,7 +181,7 @@ Create a warm, personalized message.`
         from: 'iVASA Therapeutic Insights <insights@ivasa.ai>',
         to: user.email,
         subject: 'Your Weekly Therapeutic Insights from iVASA',
-        html: this.generateEmailHTML(user.first_name, summary, meditation.type),
+        html: this.generateEmailHTML(user.first_name, user.days_since_last_session, meditation.type),
         attachments: [
           {
             filename: `meditation_${meditation.type}.mp3`,
@@ -307,7 +218,24 @@ Create a warm, personalized message.`
   /**
    * Generate HTML email template
    */
-  private generateEmailHTML(firstName: string, summary: string, meditationType: string): string {
+  private generateEmailHTML(firstName: string, daysSinceLastSession: number, meditationType: string): string {
+    // Determine message based on timing
+    const isRecentUser = daysSinceLastSession <= 4; // 3-4 days since session
+    const isInactiveUser = daysSinceLastSession >= 7; // 7+ days inactive
+
+    let mainMessage = '';
+    if (isRecentUser) {
+      mainMessage = `
+        <p>I hope you're doing well. It's been a few days since our last session, and I wanted to check in with you.</p>
+        <p>Therapeutic growth happens not just in our sessions together, but in the quiet moments of reflection between them. Keep showing up for yourself - that's where the real transformation occurs.</p>
+      `;
+    } else if (isInactiveUser) {
+      mainMessage = `
+        <p>I've been thinking about you and wanted to reach out. It's been a little while since we last connected.</p>
+        <p>Life gets busy, and that's completely normal. Whenever you're ready to continue your therapeutic journey, I'll be here. There's no pressure - just know that this space is always available for you.</p>
+      `;
+    }
+
     return `
       <!DOCTYPE html>
       <html>
@@ -350,9 +278,9 @@ Create a warm, personalized message.`
             color: #10B981;
             margin-bottom: 20px;
           }
-          .summary {
+          .message {
             margin-bottom: 30px;
-            white-space: pre-wrap;
+            line-height: 1.8;
           }
           .meditation-section {
             background: #F0FDF4;
@@ -405,7 +333,7 @@ Create a warm, personalized message.`
       <body>
         <div class="container">
           <div class="header">
-            <h1>✨ Your Weekly Insights</h1>
+            <h1>✨ A Moment of Peace for You</h1>
           </div>
 
           <div class="content">
@@ -413,20 +341,20 @@ Create a warm, personalized message.`
               Hello ${firstName},
             </div>
 
-            <div class="summary">
-              ${summary}
+            <div class="message">
+              ${mainMessage}
             </div>
 
             <div class="meditation-section">
               <h3>🧘 Guided Meditation Included</h3>
               <p>
-                I've attached a ${meditationType} meditation for you this week.
+                I've attached a ${meditationType} meditation for you.
                 Find a quiet moment, press play, and allow yourself to simply be present.
               </p>
             </div>
 
             <div class="cta">
-              <a href="https://beta.ivasa.ai">Continue Your Journey</a>
+              <a href="https://beta.ivasa.ai/dashboard">View Your Sessions</a>
             </div>
           </div>
 
@@ -467,11 +395,8 @@ Create a warm, personalized message.`
       for (const user of users) {
         console.log(`\n--- Processing ${user.email} ---`);
 
-        // Generate summary
-        const summary = await this.generateRecapSummary(user.user_id, user.first_name);
-
-        // Send email
-        const success = await this.sendRecapEmail(user, summary);
+        // Send email (no summary needed - just encouragement + meditation)
+        const success = await this.sendRecapEmail(user);
 
         if (success) {
           successCount++;
