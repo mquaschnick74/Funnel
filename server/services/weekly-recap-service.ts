@@ -385,7 +385,7 @@ export class WeeklyRecapService {
       <body>
         <div class="container">
           <div class="header">
-            <img src="https://www.start.ivasa.ai/favicon.png"
+            <img src="https://www.start.ivasa.ai/ivasa-logo.png"
                  alt="iVASA"
                  style="width: 48px; height: 48px; margin-bottom: 16px;">
             <h1>Your Weekly Therapeutic Check-In</h1>
