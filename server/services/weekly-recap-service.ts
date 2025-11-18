@@ -184,22 +184,20 @@ export class WeeklyRecapService {
         return false;
       }
 
-      // Read meditation file
-      const meditationBuffer = fs.readFileSync(meditation.path);
-      const meditationBase64 = meditationBuffer.toString('base64');
+      // Generate meditation URL (publicly accessible)
+      const meditationUrl = `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co/meditations/${user.preferred_meditation_voice}/${meditation.type}_meditation.mp3`;
 
-      // Send email with Resend
+      // Send email with Resend (no attachment - just link)
       const { data, error } = await resend.emails.send({
         from: 'iVASA Therapeutic Insights <insights@ivasa.ai>',
         to: user.email,
         subject: 'Your Weekly Therapeutic Insights from iVASA',
-        html: this.generateEmailHTML(user.first_name, user.days_since_last_session, meditation.type),
-        attachments: [
-          {
-            filename: `meditation_${meditation.type}.mp3`,
-            content: meditationBase64
-          }
-        ]
+        html: this.generateEmailHTML(
+          user.first_name,
+          user.days_since_last_session,
+          meditation.type,
+          meditationUrl
+        )
       });
 
       if (error) {
@@ -230,23 +228,29 @@ export class WeeklyRecapService {
   /**
    * Generate HTML email template
    */
-  private generateEmailHTML(firstName: string, daysSinceLastSession: number, meditationType: string): string {
-    // Determine message based on timing
-    const isRecentUser = daysSinceLastSession <= 4; // 3-4 days since session
-    const isInactiveUser = daysSinceLastSession >= 7; // 7+ days inactive
+  private generateEmailHTML(firstName: string, daysSinceLastSession: number, meditationType: string, meditationUrl: string): string {
+    // Determine message based on timing - NO session details
+    const isRecentUser = daysSinceLastSession <= 4;
+    const isInactiveUser = daysSinceLastSession >= 7;
 
     let mainMessage = '';
     if (isRecentUser) {
       mainMessage = `
-        <p>I hope you're doing well. It's been a few days since our last session, and I wanted to check in with you.</p>
-        <p>Therapeutic growth happens not just in our sessions together, but in the quiet moments of reflection between them. Keep showing up for yourself - that's where the real transformation occurs.</p>
+        <p>I hope you're doing well. It's been a few days since we last connected, and I wanted to check in with you.</p>
+        <p>Therapeutic growth happens not just in our sessions together, but in the quiet moments of reflection between them. Keep showing up for yourself—that's where the real transformation occurs.</p>
       `;
     } else if (isInactiveUser) {
       mainMessage = `
         <p>I've been thinking about you and wanted to reach out. It's been a little while since we last connected.</p>
-        <p>Life gets busy, and that's completely normal. Whenever you're ready to continue your therapeutic journey, I'll be here. There's no pressure - just know that this space is always available for you.</p>
+        <p>Life gets busy, and that's completely normal. Whenever you're ready to continue your therapeutic journey, I'll be here. There's no pressure—just know that this space is always available for you.</p>
       `;
     }
+
+    // Format meditation type for display
+    const meditationDisplay = meditationType
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
 
     return `
       <!DOCTYPE html>
@@ -281,6 +285,7 @@ export class WeeklyRecapService {
             color: white;
             font-size: 28px;
             font-weight: 600;
+            letter-spacing: -0.5px;
           }
           .content {
             padding: 40px 30px;
@@ -289,27 +294,53 @@ export class WeeklyRecapService {
             font-size: 18px;
             color: #10B981;
             margin-bottom: 20px;
+            font-weight: 500;
           }
           .message {
             margin-bottom: 30px;
             line-height: 1.8;
+            color: #374151;
           }
-          .meditation-section {
-            background: #F0FDF4;
-            border-left: 4px solid #10B981;
-            padding: 20px;
+          .meditation-player {
+            background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
+            border: 1px solid #D1FAE5;
+            border-radius: 12px;
+            padding: 30px;
             margin: 30px 0;
-            border-radius: 8px;
+            text-align: center;
           }
-          .meditation-section h3 {
-            margin: 0 0 10px 0;
-            color: #10B981;
-            font-size: 16px;
+          .meditation-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #065F46;
+            margin: 0 0 8px 0;
           }
-          .meditation-section p {
-            margin: 0;
-            color: #6B7280;
+          .meditation-subtitle {
             font-size: 14px;
+            color: #059669;
+            margin: 0 0 24px 0;
+          }
+          .play-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 16px 48px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+          }
+          .play-button:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+          }
+          .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #E5E7EB, transparent);
+            margin: 30px 0;
           }
           .cta {
             text-align: center;
@@ -317,16 +348,17 @@ export class WeeklyRecapService {
           }
           .cta a {
             display: inline-block;
-            background: #10B981;
-            color: white;
+            background: white;
+            color: #10B981;
             padding: 14px 32px;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
-            transition: background 0.3s;
+            border: 2px solid #10B981;
+            transition: all 0.3s ease;
           }
           .cta a:hover {
-            background: #059669;
+            background: #F0FDF4;
           }
           .footer {
             background: #F9FAFB;
@@ -340,12 +372,23 @@ export class WeeklyRecapService {
             color: #10B981;
             text-decoration: none;
           }
+          .footer a:hover {
+            text-decoration: underline;
+          }
+          .footer-meta {
+            margin-top: 15px;
+            color: #9CA3AF;
+            font-size: 12px;
+          }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1>✨ A Moment of Peace for You</h1>
+            <img src="https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co/favicon.png"
+                 alt="iVASA"
+                 style="width: 48px; height: 48px; margin-bottom: 16px;">
+            <h1>Your Weekly Therapeutic Check-In</h1>
           </div>
 
           <div class="content">
@@ -357,13 +400,15 @@ export class WeeklyRecapService {
               ${mainMessage}
             </div>
 
-            <div class="meditation-section">
-              <h3>🧘 Guided Meditation Included</h3>
-              <p>
-                I've attached a ${meditationType} meditation for you.
-                Find a quiet moment, press play, and allow yourself to simply be present.
-              </p>
+            <div class="meditation-player">
+              <h2 class="meditation-title">Guided Meditation</h2>
+              <p class="meditation-subtitle">${meditationDisplay} • 4-10 minutes</p>
+              <a href="${meditationUrl}" class="play-button" target="_blank">
+                Play Meditation
+              </a>
             </div>
+
+            <div class="divider"></div>
 
             <div class="cta">
               <a href="https://beta.ivasa.ai/dashboard">View Your Sessions</a>
@@ -375,9 +420,9 @@ export class WeeklyRecapService {
               You're receiving this because you're part of the iVASA community.
             </p>
             <p>
-              <a href="https://beta.ivasa.ai/dashboard">Manage your email preferences</a>
+              <a href="https://beta.ivasa.ai/dashboard">Manage email preferences</a>
             </p>
-            <p style="margin-top: 15px; color: #9CA3AF; font-size: 12px;">
+            <p class="footer-meta">
               © 2025 iVASA. All rights reserved.
             </p>
           </div>
