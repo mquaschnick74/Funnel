@@ -53,7 +53,7 @@ export class WeeklyRecapService {
       const userIds = prefsData.map(p => p.user_id);
       const { data: profiles, error: profileError } = await supabase
         .from('user_profiles')
-        .select('id, email, first_name')
+        .select('id, email, full_name')
         .in('id', userIds);
 
       if (profileError) {
@@ -112,7 +112,7 @@ export class WeeklyRecapService {
           usersNeedingRecap.push({
             user_id: pref.user_id,
             email: profile.email,
-            first_name: profile.first_name || 'there',
+            first_name: profile.full_name?.split(' ')[0] || profile.email.split('@')[0] || 'there',
             last_session_date: lastSession?.start_time || null,
             days_since_last_session: daysSinceLastSession,
             preferred_meditation_voice: pref.preferred_meditation_voice || 'sarah',
