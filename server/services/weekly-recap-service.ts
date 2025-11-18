@@ -185,7 +185,7 @@ export class WeeklyRecapService {
       }
 
       // Generate meditation URL (publicly accessible)
-      const meditationUrl = `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co/meditations/${user.preferred_meditation_voice}/${meditation.type}_meditation.mp3`;
+      const meditationUrl = `https://www.start.ivasa.ai/meditations/${user.preferred_meditation_voice}/${meditation.type}_meditation.mp3`;
 
       // Send email with Resend (no attachment - just link)
       const { data, error } = await resend.emails.send({
@@ -385,7 +385,7 @@ export class WeeklyRecapService {
       <body>
         <div class="container">
           <div class="header">
-            <img src="https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co/favicon.png"
+            <img src="https://www.start.ivasa.ai/favicon.png"
                  alt="iVASA"
                  style="width: 48px; height: 48px; margin-bottom: 16px;">
             <h1>Your Weekly Therapeutic Check-In</h1>
