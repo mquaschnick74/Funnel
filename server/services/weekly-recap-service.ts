@@ -387,7 +387,7 @@ export class WeeklyRecapService {
           <div class="header">
             <img src="https://www.start.ivasa.ai/ivasa-logo.png"
                  alt="iVASA"
-                 style="width: 48px; height: 48px; margin-bottom: 16px;">
+                 style="width: 120px; height: auto; margin-bottom: 16px;">
             <h1>Your Weekly Therapeutic Check-In</h1>
           </div>
 
@@ -401,10 +401,10 @@ export class WeeklyRecapService {
             </div>
 
             <div class="meditation-player">
-              <h2 class="meditation-title">Guided Meditation</h2>
-              <p class="meditation-subtitle">${meditationDisplay} • 4-10 minutes</p>
-              <a href="${meditationUrl}" class="play-button" target="_blank">
-                Play Meditation
+              <h2 class="meditation-title">Resources for Your Journey</h2>
+              <p class="meditation-subtitle">Guided meditations, educational videos, and therapeutic insights</p>
+              <a href="https://www.start.ivasa.ai/learn-more" class="play-button" target="_blank">
+                Explore Resources
               </a>
             </div>
 
