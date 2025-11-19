@@ -184,19 +184,14 @@ export class WeeklyRecapService {
         return false;
       }
 
-      // Generate meditation URL (publicly accessible)
-      const meditationUrl = `https://www.start.ivasa.ai/meditations/${user.preferred_meditation_voice}/${meditation.type}_meditation.mp3`;
-
-      // Send email with Resend (no attachment - just link)
+      // Send email with Resend
       const { data, error } = await resend.emails.send({
         from: 'iVASA Therapeutic Insights <insights@ivasa.ai>',
         to: user.email,
         subject: 'Your Weekly Therapeutic Insights from iVASA',
         html: this.generateEmailHTML(
           user.first_name,
-          user.days_since_last_session,
-          meditation.type,
-          meditationUrl
+          user.days_since_last_session
         )
       });
 
@@ -228,7 +223,7 @@ export class WeeklyRecapService {
   /**
    * Generate HTML email template
    */
-  private generateEmailHTML(firstName: string, daysSinceLastSession: number, meditationType: string, meditationUrl: string): string {
+  private generateEmailHTML(firstName: string, daysSinceLastSession: number): string {
     // Determine message based on timing - NO session details
     const isRecentUser = daysSinceLastSession <= 4;
     const isInactiveUser = daysSinceLastSession >= 7;
@@ -245,12 +240,6 @@ export class WeeklyRecapService {
         <p>Life gets busy, and that's completely normal. Whenever you're ready to continue your therapeutic journey, I'll be here. There's no pressure—just know that this space is always available for you.</p>
       `;
     }
-
-    // Format meditation type for display
-    const meditationDisplay = meditationType
-      .split('_')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
 
     return `
       <!DOCTYPE html>
@@ -403,7 +392,7 @@ export class WeeklyRecapService {
             <div class="meditation-player">
               <h2 class="meditation-title">Resources for Your Journey</h2>
               <p class="meditation-subtitle">Guided meditations, educational videos, and therapeutic insights</p>
-              <a href="https://www.start.ivasa.ai/learn-more" class="play-button" target="_blank">
+              <a href="https://beta.ivasa.ai/learn-more" class="play-button" target="_blank">
                 Explore Resources
               </a>
             </div>
