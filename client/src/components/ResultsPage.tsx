@@ -296,7 +296,7 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
               type="button"
             >
               <span className="flex items-center gap-2">
-                Create Free Account to See Your Complete Profile
+                Create Account with First Month Free
                 <ChevronRight className="w-5 h-5" />
               </span>
             </Button>
