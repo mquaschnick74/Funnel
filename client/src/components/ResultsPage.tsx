@@ -290,7 +290,7 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-emerald-400/20 to-emerald-500/20 blur-3xl opacity-30" />
             <Button
               size="lg"
-              className="relative w-full text-lg py-7 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 shadow-lg shadow-emerald-500/25 border border-emerald-400/30"
+              className="relative w-full text-sm md:text-lg py-7 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 shadow-lg shadow-emerald-500/25 border border-emerald-400/30 whitespace-normal md:whitespace-nowrap"
               onClick={handleSignup}
               data-testid="button-create-account"
               type="button"
