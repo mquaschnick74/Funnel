@@ -4,9 +4,6 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import AssessmentFlow from "@/pages/AssessmentFlow";
-import LearnMore from "@/pages/LearnMore";
-import MeditationLibrary from "@/pages/MeditationLibrary";
-import VideoLibrary from "@/pages/VideoLibrary";
 import NotFound from "@/pages/not-found";
 import { useIframeMessaging } from "@/hooks/useIframeMessaging";
 
@@ -17,9 +14,6 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={AssessmentFlow} />
-      <Route path="/learn-more" component={LearnMore} />
-      <Route path="/meditations" component={MeditationLibrary} />
-      <Route path="/videos" component={VideoLibrary} />
       <Route component={NotFound} />
     </Switch>
   );
