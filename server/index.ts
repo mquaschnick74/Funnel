@@ -1,8 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
-import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { startWeeklyRecapCron } from "./jobs/weekly-recap-cron";
 
 const app = express();
 
@@ -17,9 +15,6 @@ app.use(express.json({
   }
 }));
 app.use(express.urlencoded({ extended: false }));
-
-// Serve static files from public folder (meditations, favicon, etc.)
-app.use(express.static(path.join(import.meta.dirname, '..', 'public')));
 
 // Allow iframe embedding from any domain
 app.use((req, res, next) => {
@@ -92,9 +87,6 @@ app.use((req, res, next) => {
       reusePort: true,
     }, () => {
       log(`serving on port ${port}`);
-
-      // Start weekly recap cron job
-      startWeeklyRecapCron();
     });
   } catch (error) {
     console.error('Fatal error during startup:', error);
