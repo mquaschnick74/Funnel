@@ -258,6 +258,7 @@ export class WeeklyRecapService {
       `;
     }
 
+    // VASA-Plus colors: HSL(268, 85%, 70%) = #B17AE8, rgba(107, 70, 193, 0.1)
     return `
       <!DOCTYPE html>
       <html>
@@ -271,7 +272,7 @@ export class WeeklyRecapService {
             color: #1F2937;
             margin: 0;
             padding: 0;
-            background-color: #F3F4F6;
+            background-color: #F5F3FF;
           }
           .container {
             max-width: 600px;
@@ -279,26 +280,43 @@ export class WeeklyRecapService {
             background: white;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(107, 70, 193, 0.15);
           }
           .header {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            padding: 40px 30px;
+            position: relative;
+            height: 280px;
+            background-image: url('https://www.start.ivasa.ai/email_photo.jpg');
+            background-size: cover;
+            background-position: center;
             text-align: center;
+          }
+          .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(177, 122, 232, 0.85) 0%, rgba(107, 70, 193, 0.9) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
           }
           .header h1 {
             margin: 0;
             color: white;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 600;
             letter-spacing: -0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
           }
           .content {
             padding: 40px 30px;
           }
           .greeting {
             font-size: 18px;
-            color: #10B981;
+            color: #7C3AED;
             margin-bottom: 20px;
             font-weight: 500;
           }
@@ -308,8 +326,8 @@ export class WeeklyRecapService {
             color: #374151;
           }
           .meditation-player {
-            background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
-            border: 1px solid #D1FAE5;
+            background: linear-gradient(135deg, rgba(107, 70, 193, 0.08) 0%, rgba(177, 122, 232, 0.12) 100%);
+            border: 1px solid rgba(107, 70, 193, 0.2);
             border-radius: 12px;
             padding: 30px;
             margin: 30px 0;
@@ -318,17 +336,17 @@ export class WeeklyRecapService {
           .meditation-title {
             font-size: 18px;
             font-weight: 600;
-            color: #065F46;
+            color: #5B21B6;
             margin: 0 0 8px 0;
           }
           .meditation-subtitle {
             font-size: 14px;
-            color: #059669;
+            color: #7C3AED;
             margin: 0 0 24px 0;
           }
           .play-button {
             display: inline-block;
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            background: linear-gradient(135deg, #B17AE8 0%, #6B46C1 100%);
             color: white;
             padding: 16px 48px;
             text-decoration: none;
@@ -336,16 +354,16 @@ export class WeeklyRecapService {
             font-weight: 600;
             font-size: 16px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3);
           }
           .play-button:hover {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, #9F67D8 0%, #5B21B6 100%);
+            box-shadow: 0 6px 16px rgba(107, 70, 193, 0.4);
             transform: translateY(-2px);
           }
           .divider {
             height: 1px;
-            background: linear-gradient(to right, transparent, #E5E7EB, transparent);
+            background: linear-gradient(to right, transparent, rgba(107, 70, 193, 0.2), transparent);
             margin: 30px 0;
           }
           .cta {
@@ -355,27 +373,27 @@ export class WeeklyRecapService {
           .cta a {
             display: inline-block;
             background: white;
-            color: #10B981;
+            color: #7C3AED;
             padding: 14px 32px;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
-            border: 2px solid #10B981;
+            border: 2px solid #B17AE8;
             transition: all 0.3s ease;
           }
           .cta a:hover {
-            background: #F0FDF4;
+            background: rgba(107, 70, 193, 0.1);
           }
           .footer {
-            background: #F9FAFB;
+            background: #FAF5FF;
             padding: 30px;
             text-align: center;
             color: #6B7280;
             font-size: 14px;
-            border-top: 1px solid #E5E7EB;
+            border-top: 1px solid rgba(107, 70, 193, 0.15);
           }
           .footer a {
-            color: #10B981;
+            color: #7C3AED;
             text-decoration: none;
           }
           .footer a:hover {
@@ -391,10 +409,12 @@ export class WeeklyRecapService {
       <body>
         <div class="container">
           <div class="header">
-            <img src="https://www.start.ivasa.ai/ivasa-logo.png"
-                 alt="iVASA"
-                 style="width: 120px; height: auto; margin-bottom: 16px;">
-            <h1>Your Weekly Therapeutic Check-In</h1>
+            <div class="header-overlay">
+              <img src="https://www.start.ivasa.ai/ivasa-logo.png"
+                   alt="iVASA"
+                   style="width: 140px; height: auto; margin-bottom: 20px; filter: brightness(0) invert(1);">
+              <h1>Your Weekly Therapeutic Check-In</h1>
+            </div>
           </div>
 
           <div class="content">
