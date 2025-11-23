@@ -111,18 +111,18 @@ export class WeeklyRecapService {
         }
 
         // Determine if user needs recap
-        // Case 1: 3 days after last session
-        // Case 2: 7+ days with no sessions (inactive)
+        // Case 1: Has session and it's been 3+ days since last session
+        // Case 2: No sessions at all (new user who hasn't engaged)
         const needsRecap =
-          (lastSession && daysSinceLastSession >= 3 && daysSinceLastSession <= 4) ||
-          (!lastSession && daysSinceLastSession >= 7);
+          (lastSession && daysSinceLastSession >= 3) ||
+          (!lastSession);
 
         console.log(`🧮 User ${pref.user_id} evaluation:`, {
           hasSession: !!lastSession,
           daysSinceLastSession,
           needsRecap,
-          case1: lastSession && daysSinceLastSession >= 3 && daysSinceLastSession <= 4,
-          case2: !lastSession && daysSinceLastSession >= 7
+          case1: lastSession && daysSinceLastSession >= 3,
+          case2: !lastSession
         });
 
         if (needsRecap) {
