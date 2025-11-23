@@ -31,8 +31,8 @@ export function startWeeklyRecapCron() {
 
   // Optional: Run immediately on startup for testing
   // Uncomment this if you want to test immediately when server starts
-  // setTimeout(() => {
-  //   console.log('🧪 Running weekly recap check on startup...');
-  //   weeklyRecapService.processWeeklyRecaps();
-  // }, 5000);
+  setTimeout(() => {
+    console.log('🧪 Running weekly recap check on startup...');
+    weeklyRecapService.processWeeklyRecaps();
+  }, 5000);
 }
