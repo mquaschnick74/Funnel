@@ -56,10 +56,14 @@ export class WeeklyRecapService {
 
       // Get user profiles separately
       const userIds = prefsData.map(p => p.user_id);
+      console.log('🔎 Looking up profiles for user IDs:', userIds);
+
       const { data: profiles, error: profileError } = await supabase
         .from('user_profiles')
         .select('id, email, full_name')
         .in('id', userIds);
+
+      console.log('👤 Profiles found:', profiles);
 
       if (profileError) {
         console.error('Error fetching profiles:', profileError);
@@ -112,6 +116,14 @@ export class WeeklyRecapService {
         const needsRecap =
           (lastSession && daysSinceLastSession >= 3 && daysSinceLastSession <= 4) ||
           (!lastSession && daysSinceLastSession >= 7);
+
+        console.log(`🧮 User ${pref.user_id} evaluation:`, {
+          hasSession: !!lastSession,
+          daysSinceLastSession,
+          needsRecap,
+          case1: lastSession && daysSinceLastSession >= 3 && daysSinceLastSession <= 4,
+          case2: !lastSession && daysSinceLastSession >= 7
+        });
 
         if (needsRecap) {
           usersNeedingRecap.push({
