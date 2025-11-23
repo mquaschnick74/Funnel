@@ -284,13 +284,16 @@ export class WeeklyRecapService {
           }
           .header {
             position: relative;
-            height: 280px;
-            background-image: url('https://www.start.ivasa.ai/email_photo.jpg');
-            background-size: cover;
-            background-position: center;
             text-align: center;
+            overflow: hidden;
           }
-          .header-overlay {
+          .header-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+          }
+          .header-content {
             position: absolute;
             top: 0;
             left: 0;
@@ -409,11 +412,15 @@ export class WeeklyRecapService {
       <body>
         <div class="container">
           <div class="header">
-            <div class="header-overlay">
+            <img src="https://www.start.ivasa.ai/email_photo.jpg"
+                 alt="Therapeutic Journey"
+                 class="header-image"
+                 style="width: 100%; height: 280px; object-fit: cover; display: block;">
+            <div class="header-content" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(177, 122, 232, 0.85) 0%, rgba(107, 70, 193, 0.9) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px;">
               <img src="https://www.start.ivasa.ai/ivasa-logo.png"
                    alt="iVASA"
-                   style="width: 140px; height: auto; margin-bottom: 20px; filter: brightness(0) invert(1);">
-              <h1>Your Weekly Therapeutic Check-In</h1>
+                   style="width: 140px; height: auto; margin-bottom: 20px;">
+              <h1 style="margin: 0; color: white; font-size: 26px; font-weight: 600; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Your Weekly Therapeutic Check-In</h1>
             </div>
           </div>
 
