@@ -39,6 +39,8 @@ export class WeeklyRecapService {
         .select('*')
         .eq('weekly_recap_enabled', true);
 
+      console.log('📊 Query result:', { prefsData, prefsError });
+
       if (prefsError) {
         console.error('Error fetching preferences:', prefsError);
         return [];
@@ -46,6 +48,9 @@ export class WeeklyRecapService {
 
       if (!prefsData || prefsData.length === 0) {
         console.log('No users with weekly_recap_enabled found');
+        // Debug: Let's see ALL preferences
+        const { data: allPrefs } = await supabase.from('user_email_preferences').select('*');
+        console.log('📋 ALL email preferences in DB:', allPrefs);
         return [];
       }
 
