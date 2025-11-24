@@ -453,7 +453,7 @@ export class WeeklyRecapService {
               You're receiving this because you're part of the iVASA community.
             </p>
             <p>
-              <a href="https://beta.ivasa.ai/dashboard">Manage email preferences</a>
+              <a href="https://beta.ivasa.ai/dashboard">Email preferences are in Settings</a>
             </p>
             <p class="footer-meta">
               © 2025 iVASA. All rights reserved.
