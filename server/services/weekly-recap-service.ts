@@ -248,28 +248,28 @@ export class WeeklyRecapService {
     let mainMessage = '';
     if (isRecentUser) {
       mainMessage = `
-        <p style="margin: 0 0 16px 0; color: #374151; font-size: 16px; line-height: 1.7;">
+        <p style="margin: 0 0 16px 0; color: #FFFFFF; font-size: 16px; line-height: 1.7;">
           I hope you're doing well. It's been a few days since we last connected, and I wanted to check in with you.
         </p>
-        <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.7;">
+        <p style="margin: 0; color: #FFFFFF; font-size: 16px; line-height: 1.7;">
           Therapeutic growth happens not just in our sessions together, but in the quiet moments of reflection between them. Keep showing up for yourself—that's where the real transformation occurs.
         </p>
       `;
     } else if (isInactiveUser) {
       mainMessage = `
-        <p style="margin: 0 0 16px 0; color: #374151; font-size: 16px; line-height: 1.7;">
+        <p style="margin: 0 0 16px 0; color: #FFFFFF; font-size: 16px; line-height: 1.7;">
           I've been thinking about you and wanted to reach out. It's been a little while since we last connected.
         </p>
-        <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.7;">
+        <p style="margin: 0; color: #FFFFFF; font-size: 16px; line-height: 1.7;">
           Life gets busy, and that's completely normal. Whenever you're ready to continue your therapeutic journey, I'll be here. There's no pressure—just know that this space is always available for you.
         </p>
       `;
     } else {
       mainMessage = `
-        <p style="margin: 0 0 16px 0; color: #374151; font-size: 16px; line-height: 1.7;">
+        <p style="margin: 0 0 16px 0; color: #FFFFFF; font-size: 16px; line-height: 1.7;">
           I wanted to check in and see how you're doing on your therapeutic journey.
         </p>
-        <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.7;">
+        <p style="margin: 0; color: #FFFFFF; font-size: 16px; line-height: 1.7;">
           Remember, growth isn't always linear. Every step forward, no matter how small, is progress worth celebrating.
         </p>
       `;
@@ -299,11 +299,11 @@ export class WeeklyRecapService {
             <td align="center" style="padding: 40px 20px;">
 
               <!-- Email Card -->
-              <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="max-width: 600px; width: 100%; background-color: #F5F3FF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(107, 70, 193, 0.12);">
+              <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="max-width: 600px; width: 100%; background-color: #5B21B6; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(107, 70, 193, 0.12);">
 
                 <!-- Logo Header -->
                 <tr>
-                  <td align="center" style="padding: 32px 40px 24px 40px; background-color: #F5F3FF;">
+                  <td align="center" style="padding: 32px 40px 24px 40px; background-color: #5B21B6;">
                     <img src="https://start.ivasa.ai/ivasa-logo.png" alt="iVASA" width="600" style="display: block; width: 600px; max-width: 100%; height: auto;">
                   </td>
                 </tr>
@@ -325,7 +325,7 @@ export class WeeklyRecapService {
                 </tr>
                 <tr>
                   <td align="center" style="padding: 0 40px 24px 40px;">
-                    <h1 style="margin: 0; color: #5B21B6; font-size: 28px; font-weight: 700; line-height: 1.3;">
+                    <h1 style="margin: 0; color: #F5F3FF; font-size: 28px; font-weight: 700; line-height: 1.3;">
                       Continue Your<br>Therapeutic Journey
                     </h1>
                   </td>
@@ -334,7 +334,7 @@ export class WeeklyRecapService {
                 <!-- Personal Message -->
                 <tr>
                   <td style="padding: 0 40px 24px 40px;">
-                    <p style="margin: 0 0 16px 0; color: #5B21B6; font-size: 18px; font-weight: 600;">
+                    <p style="margin: 0 0 16px 0; color: #F5F3FF; font-size: 18px; font-weight: 600;">
                       Hello ${firstName},
                     </p>
                     ${mainMessage}
@@ -373,10 +373,10 @@ export class WeeklyRecapService {
                           </table>
                         </td>
                         <td valign="top" style="padding-left: 16px;">
-                          <p style="margin: 0 0 4px 0; color: #5B21B6; font-size: 16px; font-weight: 600;">
+                          <p style="margin: 0 0 4px 0; color: #F5F3FF; font-size: 16px; font-weight: 600;">
                             Session Memory
                           </p>
-                          <p style="margin: 0; color: #6B7280; font-size: 14px; line-height: 1.5;">
+                          <p style="margin: 0; color: #E9D5FF; font-size: 14px; line-height: 1.5;">
                             Your AI remembers your journey across sessions, providing continuity and deeper understanding over time.
                           </p>
                         </td>
@@ -396,10 +396,10 @@ export class WeeklyRecapService {
                           </table>
                         </td>
                         <td valign="top" style="padding-left: 16px;">
-                          <p style="margin: 0 0 4px 0; color: #5B21B6; font-size: 16px; font-weight: 600;">
+                          <p style="margin: 0 0 4px 0; color: #F5F3FF; font-size: 16px; font-weight: 600;">
                             Progress Tracking
                           </p>
-                          <p style="margin: 0; color: #6B7280; font-size: 14px; line-height: 1.5;">
+                          <p style="margin: 0; color: #E9D5FF; font-size: 14px; line-height: 1.5;">
                             See how far you've come. Track your therapeutic milestones and celebrate your growth.
                           </p>
                         </td>
@@ -419,10 +419,10 @@ export class WeeklyRecapService {
                           </table>
                         </td>
                         <td valign="top" style="padding-left: 16px;">
-                          <p style="margin: 0 0 4px 0; color: #5B21B6; font-size: 16px; font-weight: 600;">
+                          <p style="margin: 0 0 4px 0; color: #F5F3FF; font-size: 16px; font-weight: 600;">
                             Guided Meditations
                           </p>
-                          <p style="margin: 0; color: #6B7280; font-size: 14px; line-height: 1.5;">
+                          <p style="margin: 0; color: #E9D5FF; font-size: 14px; line-height: 1.5;">
                             Calm your mind with therapeutic audio designed to support your emotional wellbeing.
                           </p>
                         </td>
@@ -442,10 +442,10 @@ export class WeeklyRecapService {
                           </table>
                         </td>
                         <td valign="top" style="padding-left: 16px;">
-                          <p style="margin: 0 0 4px 0; color: #5B21B6; font-size: 16px; font-weight: 600;">
+                          <p style="margin: 0 0 4px 0; color: #F5F3FF; font-size: 16px; font-weight: 600;">
                             Therapist Connection
                           </p>
-                          <p style="margin: 0; color: #6B7280; font-size: 14px; line-height: 1.5;">
+                          <p style="margin: 0; color: #E9D5FF; font-size: 14px; line-height: 1.5;">
                             Work alongside your human therapist with AI support between sessions.
                           </p>
                         </td>
@@ -472,7 +472,7 @@ export class WeeklyRecapService {
 
                 <!-- Footer -->
                 <tr>
-                  <td style="background-color: #5B21B6; padding: 32px 40px;">
+                  <td style="background-color: #F5F3FF; padding: 32px 40px;">
                     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                       <tr>
                         <td align="center">
@@ -502,8 +502,8 @@ export class WeeklyRecapService {
 
                 <!-- Bottom Footer -->
                 <tr>
-                  <td style="padding: 24px 40px; background-color: #F5F3FF;">
-                    <p style="margin: 0 0 8px 0; color: #6B7280; font-size: 12px; line-height: 1.5; text-align: center;">
+                  <td style="padding: 24px 40px; background-color: #5B21B6;">
+                    <p style="margin: 0 0 8px 0; color: #E9D5FF; font-size: 12px; line-height: 1.5; text-align: center;">
                       You're receiving this because you're part of the iVASA therapeutic community.
                       To update your email preferences, visit your <a href="https://beta.ivasa.ai/settings" style="color: #7C3AED; text-decoration: none;">Settings</a>.
                     </p>
