@@ -291,19 +291,19 @@ export class WeeklyRecapService {
         </noscript>
         <![endif]-->
       </head>
-      <body style="margin: 0; padding: 0; background-color: #F5F3FF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+      <body style="margin: 0; padding: 0; background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
 
         <!-- Main Container -->
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #F5F3FF;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #FFFFFF;">
           <tr>
             <td align="center" style="padding: 40px 20px;">
 
               <!-- Email Card -->
-              <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="max-width: 600px; width: 100%; background-color: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(107, 70, 193, 0.12);">
+              <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="max-width: 600px; width: 100%; background-color: #F5F3FF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(107, 70, 193, 0.12);">
 
                 <!-- Logo Header -->
                 <tr>
-                  <td align="center" style="padding: 32px 40px 24px 40px; background-color: #FFFFFF;">
+                  <td align="center" style="padding: 32px 40px 24px 40px; background-color: #F5F3FF;">
                     <img src="https://start.ivasa.ai/ivasa-logo.png" alt="iVASA" width="120" style="display: block; width: 120px; height: auto;">
                   </td>
                 </tr>
@@ -502,7 +502,7 @@ export class WeeklyRecapService {
 
                 <!-- Bottom Footer -->
                 <tr>
-                  <td style="padding: 24px 40px; background-color: #FFFFFF;">
+                  <td style="padding: 24px 40px; background-color: #F5F3FF;">
                     <p style="margin: 0 0 8px 0; color: #6B7280; font-size: 12px; line-height: 1.5; text-align: center;">
                       You're receiving this because you're part of the iVASA therapeutic community.
                       To update your email preferences, visit your <a href="https://beta.ivasa.ai/settings" style="color: #7C3AED; text-decoration: none;">Settings</a>.
