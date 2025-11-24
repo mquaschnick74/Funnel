@@ -304,7 +304,7 @@ export class WeeklyRecapService {
                 <!-- Logo Header -->
                 <tr>
                   <td align="center" style="padding: 32px 40px 24px 40px; background-color: #F5F3FF;">
-                    <img src="https://start.ivasa.ai/ivasa-logo.png" alt="iVASA" width="120" style="display: block; width: 120px; height: auto;">
+                    <img src="https://start.ivasa.ai/ivasa-logo.png" alt="iVASA" width="600" style="display: block; width: 600px; max-width: 100%; height: auto;">
                   </td>
                 </tr>
 
