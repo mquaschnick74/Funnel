@@ -417,8 +417,10 @@ export class WeeklyRecapService {
                  class="header-image"
                  style="width: 100%; height: 280px; object-fit: cover; display: block;">
             <div class="header-content" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(177, 122, 232, 0.85) 0%, rgba(107, 70, 193, 0.9) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px;">
-              <h1 style="margin: 0; color: white; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">VASA-Plus</h1>
-              <p style="margin: 10px 0 0 0; color: white; font-size: 18px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">Your Weekly Therapeutic Check-In</p>
+              <img src="https://www.start.ivasa.ai/ivasa-logo.png"
+                   alt="iVASA"
+                   style="width: 140px; height: auto; margin-bottom: 20px;">
+              <h1 style="margin: 0; color: white; font-size: 22px; font-weight: 600; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Your Weekly Therapeutic Check-In</h1>
             </div>
           </div>
 
