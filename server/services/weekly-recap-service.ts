@@ -419,21 +419,21 @@ export class WeeklyRecapService {
                     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                       <tr>
                         <td align="center">
-                          <p style="margin: 0 0 16px 0; color: #FFFFFF; font-size: 16px; font-weight: 600;">
+                          <p style="margin: 0 0 16px 0; color: #5B21B6; font-size: 16px; font-weight: 600;">
                             Need help with your journey?
                           </p>
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                             <tr>
                               <td style="padding: 0 12px;">
-                                <a href="https://beta.ivasa.ai/terms" style="color: #E9D5FF; font-size: 14px; text-decoration: none;">Terms</a>
+                                <a href="https://beta.ivasa.ai/terms" style="color: #6D28D9; font-size: 14px; text-decoration: none;">Terms</a>
                               </td>
-                              <td style="color: #E9D5FF;">|</td>
+                              <td style="color: #6D28D9;">|</td>
                               <td style="padding: 0 12px;">
-                                <a href="https://beta.ivasa.ai/learn-more" style="color: #E9D5FF; font-size: 14px; text-decoration: none;">Help Center</a>
+                                <a href="https://beta.ivasa.ai/learn-more" style="color: #6D28D9; font-size: 14px; text-decoration: none;">Help Center</a>
                               </td>
-                              <td style="color: #E9D5FF;">|</td>
+                              <td style="color: #6D28D9;">|</td>
                               <td style="padding: 0 12px;">
-                                <a href="mailto:support@ivasa.ai" style="color: #E9D5FF; font-size: 14px; text-decoration: none;">Contact Us</a>
+                                <a href="mailto:support@ivasa.ai" style="color: #6D28D9; font-size: 14px; text-decoration: none;">Contact Us</a>
                               </td>
                             </tr>
                           </table>
