@@ -1,7 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
-import fs from 'fs';
-import path from 'path';
 
 // Initialize clients
 const supabase = createClient(
@@ -17,11 +15,6 @@ interface UserNeedingRecap {
   first_name: string;
   last_session_date: string | null;
   days_since_last_session: number;
-  preferred_meditation_voice: string;
-  meditation_rotation_state: {
-    used: string[];
-    available: string[];
-  };
 }
 
 export class WeeklyRecapService {
@@ -131,12 +124,7 @@ export class WeeklyRecapService {
             email: profile.email,
             first_name: profile.full_name?.split(' ')[0] || profile.email.split('@')[0] || 'there',
             last_session_date: lastSession?.start_time || null,
-            days_since_last_session: daysSinceLastSession,
-            preferred_meditation_voice: pref.preferred_meditation_voice || 'sarah',
-            meditation_rotation_state: pref.meditation_rotation_state || {
-              used: [],
-              available: ['campfire', 'ocean', 'singing_bowl']
-            }
+            days_since_last_session: daysSinceLastSession
           });
         }
       }
@@ -151,55 +139,11 @@ export class WeeklyRecapService {
   }
 
   /**
-   * Select next meditation file based on rotation
-   */
-  selectMeditationFile(user: UserNeedingRecap): { type: string; path: string } {
-    const { used, available } = user.meditation_rotation_state;
-
-    // If all have been used, reset rotation
-    if (available.length === 0) {
-      available.push('campfire', 'ocean', 'singing_bowl');
-      used.length = 0;
-    }
-
-    // Pick random from available
-    const randomIndex = Math.floor(Math.random() * available.length);
-    const selectedType = available[randomIndex];
-
-    // Move to used
-    available.splice(randomIndex, 1);
-    used.push(selectedType);
-
-    // Build file path
-    const voice = user.preferred_meditation_voice;
-    const filePath = path.join(
-      process.cwd(),
-      'public',
-      'meditations',
-      voice,
-      `${selectedType}_meditation.mp3`
-    );
-
-    console.log(`🎵 Selected ${selectedType} meditation for ${user.email}`);
-
-    return { type: selectedType, path: filePath };
-  }
-
-  /**
-   * Send recap email with meditation attachment
+   * Send recap email to user
    */
   async sendRecapEmail(user: UserNeedingRecap): Promise<boolean> {
     try {
       console.log(`📧 Sending recap email to ${user.email}...`);
-
-      // Select meditation
-      const meditation = this.selectMeditationFile(user);
-
-      // Check if file exists
-      if (!fs.existsSync(meditation.path)) {
-        console.error(`❌ Meditation file not found: ${meditation.path}`);
-        return false;
-      }
 
       // Send email with Resend
       const { data, error } = await resend.emails.send({
@@ -219,11 +163,10 @@ export class WeeklyRecapService {
 
       console.log(`✅ Email sent successfully to ${user.email}. Email ID: ${data?.id}`);
 
-      // Update rotation state and last sent timestamp
+      // Update last sent timestamp
       await supabase
         .from('user_email_preferences')
         .update({
-          meditation_rotation_state: user.meditation_rotation_state,
           last_recap_sent_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
@@ -476,21 +419,21 @@ export class WeeklyRecapService {
                     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                       <tr>
                         <td align="center">
-                          <p style="margin: 0 0 16px 0; color: #FFFFFF; font-size: 16px; font-weight: 600;">
+                          <p style="margin: 0 0 16px 0; color: #5B21B6; font-size: 16px; font-weight: 600;">
                             Need help with your journey?
                           </p>
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                             <tr>
                               <td style="padding: 0 12px;">
-                                <a href="https://beta.ivasa.ai/terms" style="color: #E9D5FF; font-size: 14px; text-decoration: none;">Terms</a>
+                                <a href="https://beta.ivasa.ai/terms" style="color: #6D28D9; font-size: 14px; text-decoration: none;">Terms</a>
                               </td>
-                              <td style="color: #E9D5FF;">|</td>
+                              <td style="color: #6D28D9;">|</td>
                               <td style="padding: 0 12px;">
-                                <a href="https://beta.ivasa.ai/learn-more" style="color: #E9D5FF; font-size: 14px; text-decoration: none;">Help Center</a>
+                                <a href="https://beta.ivasa.ai/learn-more" style="color: #6D28D9; font-size: 14px; text-decoration: none;">Help Center</a>
                               </td>
-                              <td style="color: #E9D5FF;">|</td>
+                              <td style="color: #6D28D9;">|</td>
                               <td style="padding: 0 12px;">
-                                <a href="mailto:support@ivasa.ai" style="color: #E9D5FF; font-size: 14px; text-decoration: none;">Contact Us</a>
+                                <a href="mailto:support@ivasa.ai" style="color: #6D28D9; font-size: 14px; text-decoration: none;">Contact Us</a>
                               </td>
                             </tr>
                           </table>
