@@ -1,11 +1,12 @@
 export interface QuestionAnswers {
-  q1?: string;  // Always/Sometimes/Rarely (CVDC - Contradictory Desires)
-  q2?: string;  // 5-point Likert (IBM - Emotional Expression)
-  q3?: string;  // 5-point Likert (IBM - Overwhelm)
-  q4?: string;  // 5-point Likert (CVDC - Fear vs Ambition)
-  q5?: string;  // Always/Sometimes/Rarely (IBM - Values Alignment)
-  q6?: string;  // 5-point Likert (IBM - Consistency)
-  q7?: string;  // Age range (Demographic)
+  q1?: string;  // Gender (male/female)
+  q2?: string;  // Age range
+  q3?: string;  // Always/Sometimes/Rarely (CVDC - Contradictory Desires)
+  q4?: string;  // 5-point Likert (IBM - Emotional Expression)
+  q5?: string;  // 5-point Likert (IBM - Overwhelm)
+  q6?: string;  // 5-point Likert (CVDC - Fear vs Ambition)
+  q7?: string;  // Always/Sometimes/Rarely (IBM - Values Alignment)
+  q8?: string;  // 5-point Likert (IBM - Consistency)
 }
 
 export interface ProfileResult {
@@ -15,11 +16,12 @@ export interface ProfileResult {
   cvdc_pattern: string;
   ibm_pattern: string;
   synthesis: string;
+  gender: string;
   age_range: string;
 }
 
-// Q1 scoring: Always/Sometimes/Rarely
-function scoreQ1(answer: string | undefined): number {
+// Q3 scoring: Always/Sometimes/Rarely (CVDC - Contradictory Desires)
+function scoreQ3(answer: string | undefined): number {
   switch (answer) {
     case 'always': return 2;
     case 'sometimes': return 1;
@@ -28,8 +30,8 @@ function scoreQ1(answer: string | undefined): number {
   }
 }
 
-// Q4 scoring: 5-point Likert for CVDC
-function scoreQ4(answer: string | undefined): number {
+// Q6 scoring: 5-point Likert for CVDC (Fear vs Ambition)
+function scoreQ6(answer: string | undefined): number {
   switch (answer) {
     case 'strongly_agree':
     case 'agree': return 2;
@@ -40,8 +42,8 @@ function scoreQ4(answer: string | undefined): number {
   }
 }
 
-// Q5 scoring: Always/Sometimes/Rarely
-function scoreQ5(answer: string | undefined): number {
+// Q7 scoring: Always/Sometimes/Rarely (Values Alignment - contributes to CVDC)
+function scoreQ7(answer: string | undefined): number {
   switch (answer) {
     case 'always': return 2;
     case 'sometimes': return 1;
@@ -50,7 +52,7 @@ function scoreQ5(answer: string | undefined): number {
   }
 }
 
-// IBM scoring: 5-point Likert (Q2, Q3, Q6)
+// IBM scoring: 5-point Likert (Q4, Q5, Q8)
 // Raw: Strongly agree=2, Agree=1, Neutral=0, Disagree=-1, Strongly disagree=-2
 function scoreIBMQuestion(answer: string | undefined): number {
   switch (answer) {
@@ -63,21 +65,21 @@ function scoreIBMQuestion(answer: string | undefined): number {
   }
 }
 
-// Calculate CVDC score (0-6)
+// Calculate CVDC score (0-6) from Q3, Q6, Q7
 function calculateCVDC(answers: QuestionAnswers): number {
-  const q1Score = scoreQ1(answers.q1);
-  const q4Score = scoreQ4(answers.q4);
-  const q5Score = scoreQ5(answers.q5);
-  return q1Score + q4Score + q5Score;
+  const q3Score = scoreQ3(answers.q3);
+  const q6Score = scoreQ6(answers.q6);
+  const q7Score = scoreQ7(answers.q7);
+  return q3Score + q6Score + q7Score;
 }
 
-// Calculate IBM score (normalized 0-6)
+// Calculate IBM score (normalized 0-6) from Q4, Q5, Q8
 // Raw range: -6 to 6, normalized to 0-6
 function calculateIBM(answers: QuestionAnswers): number {
-  const q2Score = scoreIBMQuestion(answers.q2);
-  const q3Score = scoreIBMQuestion(answers.q3);
-  const q6Score = scoreIBMQuestion(answers.q6);
-  const rawScore = q2Score + q3Score + q6Score; // -6 to 6
+  const q4Score = scoreIBMQuestion(answers.q4);
+  const q5Score = scoreIBMQuestion(answers.q5);
+  const q8Score = scoreIBMQuestion(answers.q8);
+  const rawScore = q4Score + q5Score + q8Score; // -6 to 6
   // Normalize: add 6 to shift range from -6..6 to 0..12, then divide by 2
   return Math.round((rawScore + 6) / 2);
 }
@@ -150,7 +152,8 @@ export function computeProfile(answers: QuestionAnswers): ProfileResult {
     cvdc_pattern: getCVDCPattern(cvdc_score),
     ibm_pattern: getIBMPattern(ibm_score),
     synthesis: generateSynthesis(cvdc_score, ibm_score),
-    age_range: answers.q7 || 'not_provided',
+    gender: answers.q1 || 'not_provided',
+    age_range: answers.q2 || 'not_provided',
   };
 }
 
@@ -163,6 +166,7 @@ export function encodeProfileData(answers: QuestionAnswers, profile: ProfileResu
     q5: answers.q5,
     q6: answers.q6,
     q7: answers.q7,
+    q8: answers.q8,
     cvdc_score: profile.cvdc_score,
     ibm_score: profile.ibm_score,
     thend_detected: profile.thend_detected,

@@ -15,6 +15,26 @@ interface Question {
 const questions: Question[] = [
   {
     id: 'q1',
+    text: 'What is your gender?',
+    choices: [
+      { value: 'male', text: 'Male' },
+      { value: 'female', text: 'Female' },
+    ],
+  },
+  {
+    id: 'q2',
+    text: "What's your age?",
+    choices: [
+      { value: '18-24', text: '18-24' },
+      { value: '25-34', text: '25-34' },
+      { value: '35-44', text: '35-44' },
+      { value: '45-54', text: '45-54' },
+      { value: '55-64', text: '55-64' },
+      { value: '65+', text: '65+' },
+    ],
+  },
+  {
+    id: 'q3',
     text: 'Do you often feel pulled in opposite directions about what you want?',
     choices: [
       { value: 'always', text: 'Always' },
@@ -23,7 +43,7 @@ const questions: Question[] = [
     ],
   },
   {
-    id: 'q2',
+    id: 'q4',
     text: "I find it difficult to express what I'm really feeling",
     choices: [
       { value: 'strongly_disagree', text: 'Strongly disagree' },
@@ -34,7 +54,7 @@ const questions: Question[] = [
     ],
   },
   {
-    id: 'q3',
+    id: 'q5',
     text: 'I feel overwhelmed by my daily responsibilities',
     choices: [
       { value: 'strongly_disagree', text: 'Strongly disagree' },
@@ -45,7 +65,7 @@ const questions: Question[] = [
     ],
   },
   {
-    id: 'q4',
+    id: 'q6',
     text: 'I want to pursue my goals but fear holds me back',
     choices: [
       { value: 'strongly_disagree', text: 'Strongly disagree' },
@@ -56,7 +76,7 @@ const questions: Question[] = [
     ],
   },
   {
-    id: 'q5',
+    id: 'q7',
     text: "My actions don't always match my values",
     choices: [
       { value: 'always', text: 'Always' },
@@ -65,7 +85,7 @@ const questions: Question[] = [
     ],
   },
   {
-    id: 'q6',
+    id: 'q8',
     text: 'I struggle to maintain consistency in my habits and routines',
     choices: [
       { value: 'strongly_disagree', text: 'Strongly disagree' },
@@ -73,18 +93,6 @@ const questions: Question[] = [
       { value: 'neutral', text: 'Neutral' },
       { value: 'agree', text: 'Agree' },
       { value: 'strongly_agree', text: 'Strongly agree' },
-    ],
-  },
-  {
-    id: 'q7',
-    text: "What's your age?",
-    choices: [
-      { value: '18-24', text: '18-24' },
-      { value: '25-34', text: '25-34' },
-      { value: '35-44', text: '35-44' },
-      { value: '45-54', text: '45-54' },
-      { value: '55-64', text: '55-64' },
-      { value: '65+', text: '65+' },
     ],
   },
 ];
