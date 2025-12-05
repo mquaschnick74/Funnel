@@ -26,7 +26,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             data-testid="heading-main"
           />
           <p className="text-xl md:text-2xl text-foreground max-w-3xl mx-auto" data-testid="text-subheading">
-             Ai Powered Therapy: That's NOT just a SCRIPT
+             Ai Powered Therapy: That isn't just a SCRIPT
           </p>
         </div>
         <Button
