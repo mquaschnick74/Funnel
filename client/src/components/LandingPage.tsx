@@ -26,7 +26,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             data-testid="heading-main"
           />
           <p className="text-xl md:text-2xl text-foreground max-w-3xl mx-auto" data-testid="text-subheading">
-             5 Questions: Affordable → Adaptive → Structured...
+             Are you a canditate for Ai Therapy?
           </p>
         </div>
         <Button
@@ -35,7 +35,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           onClick={onStart}
           data-testid="button-start-assessment"
         >
-          Ai-Powered Assessment
+          8 Question Assessment
         </Button>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto pt-8">
           {[
