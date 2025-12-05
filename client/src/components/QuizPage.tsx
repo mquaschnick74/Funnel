@@ -19,6 +19,7 @@ const questions: Question[] = [
     choices: [
       { value: 'male', text: 'Male' },
       { value: 'female', text: 'Female' },
+      { value: 'non_binary', text: 'Non-binary' },
     ],
   },
   {
