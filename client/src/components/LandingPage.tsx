@@ -39,7 +39,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         </Button>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto pt-8">
           {[
-            'Takes 90 seconds',
+            'Takes 30 seconds',
             '1,000+ Ai sessions conducted',
             'Based on 20+ years of clinical research',
             'Completely confidential',
