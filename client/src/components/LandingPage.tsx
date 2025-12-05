@@ -19,10 +19,10 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       />
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-12">
         <div className="space-y-6">
-          <img 
-            src="/ivasa-logo.png" 
-            alt="iVASA" 
-            className="mx-auto w-full max-w-2xl h-auto"
+          <img
+            src="/ivasa-logo.png"
+            alt="iVASA"
+            className="mx-auto w-full max-w-4xl h-auto"
             data-testid="heading-main"
           />
           <p className="text-xl md:text-2xl text-foreground max-w-3xl mx-auto" data-testid="text-subheading">
