@@ -16,8 +16,8 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   const [email, setEmail] = useState('');
   const [isInIframe, setIsInIframe] = useState(false);
 
-  // Check if quiz was entirely skipped (no answers provided)
-  const isQuizSkipped = !answers.q1 && !answers.q2 && !answers.q3 && !answers.q4 && !answers.q5;
+  // Check if quiz was entirely skipped (no answers provided for pattern questions q1-q6)
+  const isQuizSkipped = !answers.q1 && !answers.q2 && !answers.q3 && !answers.q4 && !answers.q5 && !answers.q6;
 
   // Detect if we're in an iframe
   useEffect(() => {
@@ -177,10 +177,10 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
                 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent leading-tight"
                 data-testid="heading-pattern"
               >
-                Your Pattern: {profile.pattern}
+                Your Assessment Results
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Here's what we discovered about your inner landscape
+                Here's what we discovered about your patterns
               </p>
             </div>
 
@@ -192,40 +192,10 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
 
               <div className="relative p-8 md:p-10 space-y-6">
-                <div className="flex items-start gap-3 group">
-                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-                  <p className="text-lg md:text-xl leading-relaxed">
-                    You experience anxiety as <span className="text-emerald-400 font-semibold">{profile.description}</span>.
-                  </p>
-                </div>
-
-                <div className="flex items-start gap-3 group">
-                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-                  <p className="text-lg md:text-xl leading-relaxed">
-                    When facing difficult choices, <span className="text-emerald-400 font-semibold">{profile.cvdcPattern}</span>. This creates a particular kind of exhaustion - the paralysis of contradictions.
-                  </p>
-                </div>
-
-                <div className="flex items-start gap-3 group">
-                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-                  <p className="text-lg md:text-xl leading-relaxed">
-                    {profile.chronicity}
-                  </p>
-                </div>
-
-                <div className="flex items-start gap-3 group">
-                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-                  <p className="text-lg md:text-xl leading-relaxed">
-                    <span className="text-emerald-400 font-semibold">{profile.restCapacity}</span>
-                  </p>
-                </div>
-
-                <div className="flex items-start gap-3 group">
-                  <ChevronRight className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform" />
-                  <p className="text-lg md:text-xl leading-relaxed">
-                    <span className="text-emerald-400 font-semibold">{profile.goal}</span>
-                  </p>
-                </div>
+                {/* Synthesis - Main insight text */}
+                <p className="text-lg md:text-xl leading-relaxed">
+                  {profile.synthesis}
+                </p>
               </div>
             </Card>
           </>
