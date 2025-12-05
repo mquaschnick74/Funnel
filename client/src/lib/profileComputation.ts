@@ -170,6 +170,11 @@ export function encodeProfileData(answers: QuestionAnswers, profile: ProfileResu
     cvdc_score: profile.cvdc_score,
     ibm_score: profile.ibm_score,
     thend_detected: profile.thend_detected,
+    cvdc_pattern: profile.cvdc_pattern,
+    ibm_pattern: profile.ibm_pattern,
+    synthesis: profile.synthesis,
+    gender: profile.gender,
+    age_range: profile.age_range,
     timestamp: Date.now(),
   };
 
