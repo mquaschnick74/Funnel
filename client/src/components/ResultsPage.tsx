@@ -16,9 +16,9 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   const [email, setEmail] = useState('');
   const [isInIframe, setIsInIframe] = useState(false);
 
-  // Check if quiz was entirely skipped (no answers provided for pattern questions q3-q8)
+  // Check if quiz was entirely skipped (no answers provided for pattern questions q3-q9)
   // Q1 (gender) and Q2 (age) are demographics, so we check pattern questions only
-  const isQuizSkipped = !answers.q3 && !answers.q4 && !answers.q5 && !answers.q6 && !answers.q7 && !answers.q8;
+  const isQuizSkipped = !answers.q3 && !answers.q4 && !answers.q5 && !answers.q6 && !answers.q7 && !answers.q8 && !answers.q9;
 
   // Detect if we're in an iframe
   useEffect(() => {

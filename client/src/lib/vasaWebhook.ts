@@ -11,10 +11,12 @@ export interface VasaWebhookPayload {
     q6?: string;  // CVDC - Fear vs Ambition
     q7?: string;  // IBM - Values Alignment
     q8?: string;  // IBM - Consistency
+    q9?: string;  // Register Detection
   };
   cvdc_score: number;
   ibm_score: number;
   thend_detected: boolean | null;
+  register: string;
   cvdc_pattern: string;
   ibm_pattern: string;
   synthesis: string;
@@ -32,7 +34,7 @@ export interface VasaWebhookResponse {
 /**
  * Sends assessment results to VASA backend webhook
  * @param email User's email address
- * @param answers Raw question answers (q1-q8)
+ * @param answers Raw question answers (q1-q9)
  * @param profile Computed profile result
  * @returns VASA webhook response or null on error
  */
@@ -54,10 +56,12 @@ export async function sendAssessmentToVASA(
         q6: answers.q6,
         q7: answers.q7,
         q8: answers.q8,
+        q9: answers.q9,
       },
       cvdc_score: profile.cvdc_score,
       ibm_score: profile.ibm_score,
       thend_detected: profile.thend_detected,
+      register: profile.register,
       cvdc_pattern: profile.cvdc_pattern,
       ibm_pattern: profile.ibm_pattern,
       synthesis: profile.synthesis,
@@ -71,7 +75,8 @@ export async function sendAssessmentToVASA(
       age_range: profile.age_range,
       cvdc_score: profile.cvdc_score,
       ibm_score: profile.ibm_score,
-      thend_detected: profile.thend_detected
+      thend_detected: profile.thend_detected,
+      register: profile.register
     });
 
     // Send to VASA webhook
@@ -99,6 +104,7 @@ export async function sendAssessmentToVASA(
           cvdc_score: profile.cvdc_score,
           ibm_score: profile.ibm_score,
           thend_detected: profile.thend_detected,
+          register: profile.register,
           cvdc_pattern: profile.cvdc_pattern,
           ibm_pattern: profile.ibm_pattern,
           synthesis: profile.synthesis,

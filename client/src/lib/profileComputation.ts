@@ -1,5 +1,5 @@
 export interface QuestionAnswers {
-  q1?: string;  // Gender (male/female)
+  q1?: string;  // Gender (male/female/non_binary)
   q2?: string;  // Age range
   q3?: string;  // Always/Sometimes/Rarely (CVDC - Contradictory Desires)
   q4?: string;  // 5-point Likert (IBM - Emotional Expression)
@@ -7,12 +7,14 @@ export interface QuestionAnswers {
   q6?: string;  // 5-point Likert (CVDC - Fear vs Ambition)
   q7?: string;  // Always/Sometimes/Rarely (IBM - Values Alignment)
   q8?: string;  // 5-point Likert (IBM - Consistency)
+  q9?: string;  // Register Detection / Thend Enhancement
 }
 
 export interface ProfileResult {
   cvdc_score: number;
   ibm_score: number;
   thend_detected: boolean | null;
+  register: string;  // 'real', 'symbolic', 'imaginary', 'integrated', 'fragmented', 'unknown'
   cvdc_pattern: string;
   ibm_pattern: string;
   synthesis: string;
@@ -84,17 +86,50 @@ function calculateIBM(answers: QuestionAnswers): number {
   return Math.round((rawScore + 6) / 2);
 }
 
-// Detect Thend pattern
-function detectThend(cvdc: number, ibm: number): boolean | null {
-  if (cvdc >= 4 && ibm >= 3) {
-    // Thend Absent - contradiction with behavioral collapse
-    return false;
-  } else if (cvdc >= 4 && ibm < 3) {
-    // Thend Present - can hold contradiction without behavioral collapse
-    return true;
+// Detect register from Q9 answer
+function detectRegister(q9Answer?: string): string {
+  if (!q9Answer) return 'unknown';
+
+  const registerMap: Record<string, string> = {
+    'body_focus': 'real',
+    'think_through': 'symbolic',
+    'imagine_scenarios': 'imaginary',
+    'hold_both': 'integrated',
+    'stuck_overwhelmed': 'fragmented'
+  };
+
+  return registerMap[q9Answer] || 'unknown';
+}
+
+// Detect Thend pattern with Q9 contribution
+function detectThend(cvdc: number, ibm: number, q9Answer?: string): boolean | null {
+  let thendScore = 0;
+
+  // Original CVDC/IBM logic
+  if (cvdc >= 4 && ibm < 3) {
+    thendScore += 1;  // High CVDC, low IBM = potential Thend
   }
-  // No clear indicator
-  return null;
+  if (cvdc >= 4 && ibm >= 3) {
+    thendScore -= 1;  // High CVDC, high IBM = collapse
+  }
+
+  // Q9 contribution (register-based Thend indicator)
+  if (q9Answer) {
+    const q9Weights: Record<string, number> = {
+      'body_focus': 0.5,           // Real register awareness
+      'think_through': 0,          // Neutral
+      'imagine_scenarios': -0.5,   // Imaginary avoidance
+      'hold_both': 1.5,            // Direct Thend indicator
+      'stuck_overwhelmed': -1      // Collapse
+    };
+
+    thendScore += q9Weights[q9Answer] || 0;
+  }
+
+  // Final determination
+  if (thendScore >= 1) return true;   // Thend present
+  if (thendScore <= -1) return false; // Thend absent
+  return null; // Unclear
 }
 
 // Generate CVDC pattern description
@@ -143,12 +178,14 @@ function generateSynthesis(cvdc: number, ibm: number): string {
 export function computeProfile(answers: QuestionAnswers): ProfileResult {
   const cvdc_score = calculateCVDC(answers);
   const ibm_score = calculateIBM(answers);
-  const thend_detected = detectThend(cvdc_score, ibm_score);
+  const register = detectRegister(answers.q9);
+  const thend_detected = detectThend(cvdc_score, ibm_score, answers.q9);
 
   return {
     cvdc_score,
     ibm_score,
     thend_detected,
+    register,
     cvdc_pattern: getCVDCPattern(cvdc_score),
     ibm_pattern: getIBMPattern(ibm_score),
     synthesis: generateSynthesis(cvdc_score, ibm_score),
@@ -167,9 +204,11 @@ export function encodeProfileData(answers: QuestionAnswers, profile: ProfileResu
     q6: answers.q6,
     q7: answers.q7,
     q8: answers.q8,
+    q9: answers.q9,
     cvdc_score: profile.cvdc_score,
     ibm_score: profile.ibm_score,
     thend_detected: profile.thend_detected,
+    register: profile.register,
     cvdc_pattern: profile.cvdc_pattern,
     ibm_pattern: profile.ibm_pattern,
     synthesis: profile.synthesis,

@@ -96,6 +96,17 @@ const questions: Question[] = [
       { value: 'strongly_agree', text: 'Strongly agree' },
     ],
   },
+  {
+    id: 'q9',
+    text: 'When parts of you want opposite things, how do you typically respond?',
+    choices: [
+      { value: 'body_focus', text: 'I focus on what my body is telling me' },
+      { value: 'think_through', text: 'I think through the pros and cons until I can decide' },
+      { value: 'imagine_scenarios', text: 'I imagine how each choice would play out in different scenarios' },
+      { value: 'hold_both', text: 'I can hold both desires without forcing a quick resolution' },
+      { value: 'stuck_overwhelmed', text: 'I feel stuck and overwhelmed by the conflict' },
+    ],
+  },
 ];
 
 interface QuizPageProps {
