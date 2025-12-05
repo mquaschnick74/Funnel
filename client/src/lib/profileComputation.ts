@@ -1,106 +1,196 @@
 export interface QuestionAnswers {
-  q1?: string;
-  q2?: string;
-  q3?: string;
-  q4?: string;
-  q5?: string;
+  q1?: string;  // Gender (male/female/non_binary)
+  q2?: string;  // Age range
+  q3?: string;  // Always/Sometimes/Rarely (CVDC - Contradictory Desires)
+  q4?: string;  // 5-point Likert (IBM - Emotional Expression)
+  q5?: string;  // 5-point Likert (IBM - Overwhelm)
+  q6?: string;  // 5-point Likert (CVDC - Fear vs Ambition)
+  q7?: string;  // Always/Sometimes/Rarely (IBM - Values Alignment)
+  q8?: string;  // 5-point Likert (IBM - Consistency)
+  q9?: string;  // Register Detection / Thend Enhancement
 }
 
 export interface ProfileResult {
-  pattern: string;
-  metaphor: string;
-  description: string;
-  register: string;
-  cvdcPattern: string;
-  chronicity: string;
-  restCapacity: string;
-  goal: string;
+  cvdc_score: number;
+  ibm_score: number;
+  thend_detected: boolean | null;
+  register: string;  // 'real', 'symbolic', 'imaginary', 'integrated', 'fragmented', 'unknown'
+  cvdc_pattern: string;
+  ibm_pattern: string;
+  synthesis: string;
+  gender: string;
+  age_range: string;
 }
 
-const q1Mapping: Record<string, { metaphor: string; register: string; description: string }> = {
-  storm_on_horizon: {
-    metaphor: 'Storm Watcher',
-    register: 'imaginary',
-    description: 'constant anticipation - always scanning the horizon for what might go wrong',
-  },
-  maze_of_mirrors: {
-    metaphor: 'Mirror Maze',
-    register: 'symbolic',
-    description: 'endless self-reflection and questioning, analyzing every angle',
-  },
-  fog_bank: {
-    metaphor: 'Fog Walker',
-    register: 'imaginary',
-    description: 'uncertainty and the need to see clearly before moving forward',
-  },
-  empty_plateau: {
-    metaphor: 'Empty Plateau',
-    register: 'real',
-    description: 'disconnection and numbness, a quiet unsettling stillness',
-  },
-  fractured_ground: {
-    metaphor: 'Fractured Ground',
-    register: 'symbolic',
-    description: 'instability and contradiction, the ground itself feels unreliable',
-  },
-};
+// Q3 scoring: Always/Sometimes/Rarely (CVDC - Contradictory Desires)
+function scoreQ3(answer: string | undefined): number {
+  switch (answer) {
+    case 'always': return 2;
+    case 'sometimes': return 1;
+    case 'rarely': return 0;
+    default: return 0;
+  }
+}
 
-const q2Mapping: Record<string, string> = {
-  stand_frozen:
-    'you freeze between options, unable to move forward because both paths feel simultaneously right and impossible',
-  rush_back:
-    'you rush between options frantically, never able to commit because each choice collapses when you choose it',
-  build_bridge: 'you try to combine contradictory options, which often creates a new layer of complexity',
-  sit_middle: 'you avoid choosing altogether, waiting for certainty that may never come',
-  close_eyes: 'you let your body decide, trusting sensation over thought',
-  split_yourself: 'you attempt to do everything, trying to walk both paths simultaneously',
-};
+// Q6 scoring: 5-point Likert for CVDC (Fear vs Ambition)
+function scoreQ6(answer: string | undefined): number {
+  switch (answer) {
+    case 'strongly_agree':
+    case 'agree': return 2;
+    case 'neutral': return 1;
+    case 'disagree':
+    case 'strongly_disagree': return 0;
+    default: return 0;
+  }
+}
 
-const q3Mapping: Record<string, string> = {
-  almost_constant:
-    "For you, anxiety isn't occasional. It's the weather you live in - perpetual storms that shape how you move through your days.",
-  sudden_intense:
-    'Your anxiety comes in sudden, intense waves - calm one moment, overwhelming the next. The unpredictability itself becomes part of the challenge.',
-  persistent_gray:
-    'Anxiety for you is a persistent gray overcast - not dramatic, but always there, dulling the color of daily life.',
-  unpredictable:
-    "The unpredictability of when anxiety will strike creates its own anxiety - you're always braced for what might come.",
-  occasional_intense:
-    "While not constant, when anxiety does emerge, it's powerful enough that you want to understand and prevent it.",
-};
+// Q7 scoring: Always/Sometimes/Rarely (Values Alignment - contributes to CVDC)
+function scoreQ7(answer: string | undefined): number {
+  switch (answer) {
+    case 'always': return 2;
+    case 'sometimes': return 1;
+    case 'rarely': return 0;
+    default: return 0;
+  }
+}
 
-const q4Mapping: Record<string, string> = {
-  impossible: 'Rest feels impossible until every task is complete - but the tasks are never truly done.',
-  dangerous: "You've learned that stopping means something might go wrong - vigilance feels like safety.",
-  guilty: 'Resting carries guilt, as if stillness is somehow selfish or irresponsible.',
-  confusing: "You've forgotten how to rest - the skill has atrophied from lack of practice.",
-  uncomfortable_doable: 'While uncomfortable, you can sit with stillness - this is actually a strength.',
-  body_wont: "Your nervous system won't allow rest - there's too much activation for settling.",
-};
+// IBM scoring: 5-point Likert (Q4, Q5, Q8)
+// Raw: Strongly agree=2, Agree=1, Neutral=0, Disagree=-1, Strongly disagree=-2
+function scoreIBMQuestion(answer: string | undefined): number {
+  switch (answer) {
+    case 'strongly_agree': return 2;
+    case 'agree': return 1;
+    case 'neutral': return 0;
+    case 'disagree': return -1;
+    case 'strongly_disagree': return -2;
+    default: return 0;
+  }
+}
 
-const q5Mapping: Record<string, string> = {
-  body_calm: 'What you long for most is somatic peace - a body that feels calm and settled.',
-  weather: "You want anxiety to become like weather - it comes and passes, but doesn't control you.",
-  beside_quiet:
-    "You're seeking a different relationship with anxiety - where it walks beside you quietly instead of consuming you.",
-  decisions_easy: 'You want to make decisions without the paralysis of panic - where choices feel navigable.',
-  breathe: 'Your deepest wish is simple but profound - to breathe freely.',
-  all_different: 'You envision comprehensive transformation - where the entire inner landscape feels different.',
-};
+// Calculate CVDC score (0-6) from Q3, Q6, Q7
+function calculateCVDC(answers: QuestionAnswers): number {
+  const q3Score = scoreQ3(answers.q3);
+  const q6Score = scoreQ6(answers.q6);
+  const q7Score = scoreQ7(answers.q7);
+  return q3Score + q6Score + q7Score;
+}
+
+// Calculate IBM score (normalized 0-6) from Q4, Q5, Q8
+// Raw range: -6 to 6, normalized to 0-6
+function calculateIBM(answers: QuestionAnswers): number {
+  const q4Score = scoreIBMQuestion(answers.q4);
+  const q5Score = scoreIBMQuestion(answers.q5);
+  const q8Score = scoreIBMQuestion(answers.q8);
+  const rawScore = q4Score + q5Score + q8Score; // -6 to 6
+  // Normalize: add 6 to shift range from -6..6 to 0..12, then divide by 2
+  return Math.round((rawScore + 6) / 2);
+}
+
+// Detect register from Q9 answer
+function detectRegister(q9Answer?: string): string {
+  if (!q9Answer) return 'unknown';
+
+  const registerMap: Record<string, string> = {
+    'body_focus': 'real',
+    'think_through': 'symbolic',
+    'imagine_scenarios': 'imaginary',
+    'hold_both': 'integrated',
+    'stuck_overwhelmed': 'fragmented'
+  };
+
+  return registerMap[q9Answer] || 'unknown';
+}
+
+// Detect Thend pattern with Q9 contribution
+function detectThend(cvdc: number, ibm: number, q9Answer?: string): boolean | null {
+  let thendScore = 0;
+
+  // Original CVDC/IBM logic
+  if (cvdc >= 4 && ibm < 3) {
+    thendScore += 1;  // High CVDC, low IBM = potential Thend
+  }
+  if (cvdc >= 4 && ibm >= 3) {
+    thendScore -= 1;  // High CVDC, high IBM = collapse
+  }
+
+  // Q9 contribution (register-based Thend indicator)
+  if (q9Answer) {
+    const q9Weights: Record<string, number> = {
+      'body_focus': 0.5,           // Real register awareness
+      'think_through': 0,          // Neutral
+      'imagine_scenarios': -0.5,   // Imaginary avoidance
+      'hold_both': 1.5,            // Direct Thend indicator
+      'stuck_overwhelmed': -1      // Collapse
+    };
+
+    thendScore += q9Weights[q9Answer] || 0;
+  }
+
+  // Final determination
+  if (thendScore >= 1) return true;   // Thend present
+  if (thendScore <= -1) return false; // Thend absent
+  return null; // Unclear
+}
+
+// Generate CVDC pattern description
+function getCVDCPattern(score: number): string {
+  if (score >= 4) {
+    return 'Strong pull between opposing desires';
+  } else if (score >= 2) {
+    return 'Moderate internal conflict about direction';
+  } else {
+    return 'Clear sense of what you want';
+  }
+}
+
+// Generate IBM pattern description
+function getIBMPattern(score: number): string {
+  if (score >= 4) {
+    return 'Gap between intentions and actions';
+  } else if (score >= 2) {
+    return 'Some inconsistency in following through';
+  } else {
+    return 'Generally consistent follow-through';
+  }
+}
+
+// Generate synthesis based on CVDC and IBM scores
+function generateSynthesis(cvdc: number, ibm: number): string {
+  const highCVDC = cvdc >= 4;
+  const lowCVDC = cvdc <= 2;
+  const highIBM = ibm >= 3;
+  const lowIBM = ibm <= 2;
+
+  if (highCVDC && highIBM) {
+    return "You experience a strong pull between opposing desires, and this inner conflict shows up as inconsistency in your daily life. The push-pull creates stress that affects multiple areas, making it hard to maintain steady routines.";
+  } else if (highCVDC && lowIBM) {
+    return "You feel pulled in opposite directions about what you want, but you have capacity to hold this complexity without falling apart. This is actually a strength - you can sit with tension rather than forcing quick resolution.";
+  } else if (lowCVDC && highIBM) {
+    return "There's a gap between your intentions and actions that makes it hard to maintain consistency. The struggle isn't about conflicting desires - it's about following through on what you already know you want.";
+  } else if (lowCVDC && lowIBM) {
+    return "You have clarity about what you want and generally follow through on your intentions. The challenges you face may be more situational than pattern-based.";
+  } else {
+    // Middle ground - moderate on both
+    return "You experience some internal tension about direction, and sometimes find it challenging to stay consistent. Understanding these patterns can help you work with them more effectively.";
+  }
+}
 
 export function computeProfile(answers: QuestionAnswers): ProfileResult {
-  const q1Data = q1Mapping[answers.q1 || 'storm_on_horizon'];
-  const pattern = `The ${q1Data.metaphor}`;
+  const cvdc_score = calculateCVDC(answers);
+  const ibm_score = calculateIBM(answers);
+  const register = detectRegister(answers.q9);
+  const thend_detected = detectThend(cvdc_score, ibm_score, answers.q9);
 
   return {
-    pattern,
-    metaphor: q1Data.metaphor,
-    description: q1Data.description,
-    register: q1Data.register,
-    cvdcPattern: q2Mapping[answers.q2 || 'stand_frozen'],
-    chronicity: q3Mapping[answers.q3 || 'almost_constant'],
-    restCapacity: q4Mapping[answers.q4 || 'impossible'],
-    goal: q5Mapping[answers.q5 || 'body_calm'],
+    cvdc_score,
+    ibm_score,
+    thend_detected,
+    register,
+    cvdc_pattern: getCVDCPattern(cvdc_score),
+    ibm_pattern: getIBMPattern(ibm_score),
+    synthesis: generateSynthesis(cvdc_score, ibm_score),
+    gender: answers.q1 || 'not_provided',
+    age_range: answers.q2 || 'not_provided',
   };
 }
 
@@ -111,8 +201,19 @@ export function encodeProfileData(answers: QuestionAnswers, profile: ProfileResu
     q3: answers.q3,
     q4: answers.q4,
     q5: answers.q5,
-    pattern: profile.pattern,
-    metaphor: profile.metaphor,
+    q6: answers.q6,
+    q7: answers.q7,
+    q8: answers.q8,
+    q9: answers.q9,
+    cvdc_score: profile.cvdc_score,
+    ibm_score: profile.ibm_score,
+    thend_detected: profile.thend_detected,
+    register: profile.register,
+    cvdc_pattern: profile.cvdc_pattern,
+    ibm_pattern: profile.ibm_pattern,
+    synthesis: profile.synthesis,
+    gender: profile.gender,
+    age_range: profile.age_range,
     timestamp: Date.now(),
   };
 

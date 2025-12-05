@@ -19,14 +19,14 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       />
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-12">
         <div className="space-y-6">
-          <img 
-            src="/ivasa-logo.png" 
-            alt="iVASA" 
-            className="mx-auto w-full max-w-2xl h-auto"
+          <img
+            src="/ivasa-logo.png"
+            alt="iVASA"
+            className="mx-auto w-full max-w-4xl h-auto"
             data-testid="heading-main"
           />
           <p className="text-xl md:text-2xl text-foreground max-w-3xl mx-auto" data-testid="text-subheading">
-             5 Questions: Affordable → Adaptive → Structured...
+             Ai Powered Therapy: That isn't just a SCRIPT
           </p>
         </div>
         <Button
@@ -35,11 +35,11 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           onClick={onStart}
           data-testid="button-start-assessment"
         >
-          Ai-Powered Assessment
+          8 Question Assessment
         </Button>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto pt-8">
           {[
-            'Takes 90 seconds',
+            'Takes 30 seconds',
             '1,000+ Ai sessions conducted',
             'Based on 20+ years of clinical research',
             'Completely confidential',
