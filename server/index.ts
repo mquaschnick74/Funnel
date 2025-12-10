@@ -12,11 +12,12 @@ declare module 'http' {
   }
 }
 app.use(express.json({
+  limit: '10mb', // Increase limit for image uploads
   verify: (req, _res, buf) => {
     req.rawBody = buf;
   }
 }));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
 // Serve static files from public folder (meditations, favicon, etc.)
 app.use(express.static(path.join(import.meta.dirname, '..', 'public')));
