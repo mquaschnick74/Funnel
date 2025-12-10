@@ -7,6 +7,8 @@ import AssessmentFlow from "@/pages/AssessmentFlow";
 import LearnMore from "@/pages/LearnMore";
 import MeditationLibrary from "@/pages/MeditationLibrary";
 import VideoLibrary from "@/pages/VideoLibrary";
+import AdminLogin from "@/pages/AdminLogin";
+import AdminEmailGenerator from "@/pages/AdminEmailGenerator";
 import NotFound from "@/pages/not-found";
 import { useIframeMessaging } from "@/hooks/useIframeMessaging";
 
@@ -20,6 +22,8 @@ function Router() {
       <Route path="/learn-more" component={LearnMore} />
       <Route path="/meditations" component={MeditationLibrary} />
       <Route path="/videos" component={VideoLibrary} />
+      <Route path="/admin" component={AdminLogin} />
+      <Route path="/admin/email-generator" component={AdminEmailGenerator} />
       <Route component={NotFound} />
     </Switch>
   );
