@@ -1,11 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { isDesertVariant } from '@/lib/variant';
 
-const loadingMessages = [
+const defaultMessages = [
   'Analyzing your responses...',
   'Mapping your inner landscape...',
   'Identifying your pattern...',
   'Generating your therapeutic profile...',
+];
+
+const desertMessages = [
+  'Analyzing your responses...',
+  'Understanding your unique patterns...',
+  'Matching you with therapeutic approaches...',
+  'Building your personalized pathway...',
 ];
 
 interface LoadingScreenProps {
@@ -14,6 +22,7 @@ interface LoadingScreenProps {
 
 export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [messageIndex, setMessageIndex] = useState(0);
+  const loadingMessages = isDesertVariant() ? desertMessages : defaultMessages;
 
   useEffect(() => {
     const messageInterval = setInterval(() => {

@@ -33,5 +33,25 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Therapy desert variant: update meta tags when ?variant=desert is present
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('variant') === 'desert') {
+          var title = 'iVASA — Real Therapy, From Wherever You Are';
+          var desc =
+            'No therapist nearby? No waitlist. No commute. Clinical-depth AI therapy available 24/7 for $8/month. Take a 30-second assessment to get started.';
+          document.title = title;
+          var metas = document.querySelectorAll('meta');
+          metas.forEach(function (m) {
+            if (m.getAttribute('name') === 'description') m.setAttribute('content', desc);
+            if (m.getAttribute('property') === 'og:title') m.setAttribute('content', title);
+            if (m.getAttribute('property') === 'og:description') m.setAttribute('content', desc);
+            if (m.getAttribute('name') === 'twitter:title') m.setAttribute('content', title);
+            if (m.getAttribute('name') === 'twitter:description') m.setAttribute('content', desc);
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

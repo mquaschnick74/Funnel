@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import type { ProfileResult, QuestionAnswers } from '@/lib/profileComputation';
 import { encodeProfileData } from '@/lib/profileComputation';
 import { ChevronRight, Sparkles } from 'lucide-react';
+import { isDesertVariant } from '@/lib/variant';
 
 interface ResultsPageProps {
   profile: ProfileResult;
@@ -15,6 +16,7 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState('');
   const [isInIframe, setIsInIframe] = useState(false);
+  const desert = isDesertVariant();
 
   // Check if quiz was entirely skipped (no answers provided for pattern questions q3-q9)
   // Q1 (gender) and Q2 (age) are demographics, so we check pattern questions only
@@ -160,7 +162,9 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
               <div className="relative p-8 md:p-10">
                 <p className="text-lg md:text-xl leading-relaxed text-center">
-                  Your journey is unique, and so is your path forward. Let our AI therapeutic guides help you discover your inner landscape through deeply meaningful conversation.
+                  {desert
+                    ? 'Real therapeutic support — built by a licensed therapist, available 24/7, from wherever you are. No waitlist. No commute.'
+                    : 'Your journey is unique, and so is your path forward. Let our AI therapeutic guides help you discover your inner landscape through deeply meaningful conversation.'}
                 </p>
               </div>
             </Card>
@@ -172,16 +176,18 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
             <div className="text-center space-y-4">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-4">
                 <Sparkles className="w-4 h-4" />
-                Assessment Complete
+                {desert ? 'Your Results Are Ready' : 'Assessment Complete'}
               </div>
               <h1
                 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent leading-tight"
                 data-testid="heading-pattern"
               >
-                Your Assessment Results
+                {desert ? "Here's What We Found" : 'Your Assessment Results'}
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Here's what we discovered about your patterns
+                {desert
+                  ? 'A therapist-designed assessment — the kind of insight that usually takes weeks to uncover'
+                  : "Here's what we discovered about your patterns"}
               </p>
             </div>
 
@@ -208,9 +214,15 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
               Meet Your AI Therapeutic Guides
             </h2>
-            <p className="text-lg text-muted-foreground">
-              Create a free account to start your first session with either guide
-            </p>
+            {desert ? (
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Available whenever you need them — no scheduling, no waiting rooms
+              </p>
+            ) : (
+              <p className="text-lg text-muted-foreground">
+                Create a free account to start your first session with either guide
+              </p>
+            )}
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -267,7 +279,9 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
               type="button"
             >
               <span className="flex items-center gap-2">
-                Create Account with First Month Free
+                {desert
+                  ? 'Start Your Free Trial — Talk to iVASA Today'
+                  : 'Create Account with First Month Free'}
                 <ChevronRight className="w-5 h-5" />
               </span>
             </Button>
@@ -278,13 +292,13 @@ export default function ResultsPage({ profile, answers }: ResultsPageProps) {
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              Takes 30 seconds
+              {desert ? 'No credit card required' : 'Takes 30 seconds'}
             </span>
             <span className="flex items-center gap-2">
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              Start your first session today
+              {desert ? 'Your first session starts in minutes' : 'Start your first session today'}
             </span>
           </div>
 

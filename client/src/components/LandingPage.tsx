@@ -1,12 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 import heroImage from '@assets/generated_images/Hero_landscape_background_image_1a3148b4.png';
+import { isDesertVariant } from '@/lib/variant';
 
 interface LandingPageProps {
   onStart: () => void;
 }
 
 export default function LandingPage({ onStart }: LandingPageProps) {
+  const desert = isDesertVariant();
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
       <div
@@ -19,6 +22,11 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       />
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-12">
         <div className="space-y-6">
+          {desert && (
+            <p className="text-base md:text-lg text-emerald-400/80 font-medium tracking-wide uppercase">
+              No therapist nearby? You're not alone — and you're not out of options.
+            </p>
+          )}
           <img
             src="/ivasa-logo.png"
             alt="iVASA"
@@ -26,7 +34,9 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             data-testid="heading-main"
           />
           <p className="text-xl md:text-2xl text-foreground max-w-3xl mx-auto" data-testid="text-subheading">
-             Ai Powered Therapy: That isn't just a SCRIPT
+            {desert
+              ? 'Clinical-depth therapy. No waitlist. No commute. From $8/month.'
+              : 'Ai Powered Therapy: That isn\'t just a SCRIPT'}
           </p>
         </div>
         <Button
@@ -35,15 +45,23 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           onClick={onStart}
           data-testid="button-start-assessment"
         >
-          8 Question Assessment
+          {desert ? 'See If iVASA Is Right for You' : '8 Question Assessment'}
         </Button>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto pt-8">
-          {[
-            'Takes 30 seconds',
-            '1,000+ Ai sessions conducted',
-            'Based on 20+ years of clinical research',
-            'Completely confidential',
-          ].map((item, index) => (
+          {(desert
+            ? [
+                'Takes 30 seconds',
+                'Available 24/7 — no appointments needed',
+                'Built by a licensed therapist with 25+ years experience',
+                'Starts at $8/month — 95% less than traditional therapy',
+              ]
+            : [
+                'Takes 30 seconds',
+                '1,000+ Ai sessions conducted',
+                'Based on 20+ years of clinical research',
+                'Completely confidential',
+              ]
+          ).map((item, index) => (
             <div
               key={index}
               className="flex items-start gap-3 text-foreground text-left"
