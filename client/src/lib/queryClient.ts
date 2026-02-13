@@ -7,7 +7,7 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-export async function apiRequest(
+export async function apiRequestLegacy(
   method: string,
   url: string,
   data?: unknown | undefined,
@@ -21,6 +21,32 @@ export async function apiRequest(
 
   await throwIfResNotOk(res);
   return res;
+}
+
+// Convenient API request function that returns JSON
+export async function apiRequest<T = any>(
+  url: string,
+  options?: {
+    method?: string;
+    body?: string;
+    headers?: Record<string, string>;
+  }
+): Promise<T> {
+  const res = await fetch(url, {
+    method: options?.method || "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
+    body: options?.body,
+    credentials: "include",
+  });
+
+  await throwIfResNotOk(res);
+
+  // Return JSON if available, otherwise return empty object
+  const text = await res.text();
+  return text ? JSON.parse(text) : {};
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";

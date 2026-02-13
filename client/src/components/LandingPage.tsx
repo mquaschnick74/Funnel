@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import { Check, Settings } from 'lucide-react';
+import { Link } from 'wouter';
 import heroImage from '@assets/generated_images/Hero_landscape_background_image_1a3148b4.png';
 
 interface LandingPageProps {
@@ -9,6 +10,16 @@ interface LandingPageProps {
 export default function LandingPage({ onStart }: LandingPageProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
+      {/* Admin Icon */}
+      <Link href="/admin">
+        <button
+          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+          title="Admin"
+        >
+          <Settings className="w-5 h-5 text-white/50 hover:text-white/80" />
+        </button>
+      </Link>
+
       <div
         className="absolute inset-0 z-0"
         style={{
