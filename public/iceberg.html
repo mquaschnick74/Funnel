@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iVASA vs CBT Chatbots — The Iceberg of Therapeutic Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(
+                165deg,
+                hsl(276, 87%, 28%) 0%,
+                hsl(276, 87%, 22%) 35%,
+                hsl(276, 90%, 18%) 70%,
+                hsl(280, 85%, 15%) 100%
+            );
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Logo in top left */
+        .logo-header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .logo-header img {
+            width: 48px;
+            height: 48px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-top: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+        }
+
+        /* Statement Display */
+        .statement-bar {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(196, 181, 253, 0.3);
+            border-radius: 16px;
+            padding: 20px 32px;
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+
+        .statement-bar::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 8px solid rgba(196, 181, 253, 0.4);
+        }
+
+        .statement-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #c4b5fd;
+            margin-bottom: 8px;
+        }
+
+        .statement-text {
+            font-size: 22px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        /* Selector */
+        .selector-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .selector-btn {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(196, 181, 253, 0.3);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .selector-btn:hover {
+            border-color: rgba(0, 208, 98, 0.5);
+            color: #fff;
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        .selector-btn.active {
+            background: rgba(0, 208, 98, 0.2);
+            border-color: #00d062;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 208, 98, 0.4);
+        }
+
+        .process-btn {
+            display: block;
+            margin: 0 auto 32px;
+            background: linear-gradient(135deg, #00d062, #06b6d4);
+            border: none;
+            color: white;
+            padding: 14px 48px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 25px rgba(0, 208, 98, 0.5),
+                        0 0 50px rgba(0, 208, 98, 0.3);
+        }
+
+        .process-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(0, 208, 98, 0.7),
+                        0 0 70px rgba(0, 208, 98, 0.5),
+                        0 0 100px rgba(0, 208, 98, 0.3);
+        }
+
+        .process-btn:disabled {
+            background: rgba(139, 92, 246, 0.3);
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Main Comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 1000px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .side {
+            position: relative;
+        }
+
+        .side-label {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .side-label h2 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .side-label p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .cbt-side .side-label h2 { color: rgba(255, 255, 255, 0.7); }
+        .cbt-side .side-label p { color: rgba(255, 255, 255, 0.5); }
+        .ivasa-side .side-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ivasa-side .side-label .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .ivasa-side .side-label .logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+        .ivasa-side .side-label h2 {
+            background: linear-gradient(to right, #00d062, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .ivasa-side .side-label p { color: #00d062; }
+
+        /* Ocean Container */
+        .ocean-container {
+            position: relative;
+            height: 520px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(196, 181, 253, 0.3);
+            box-shadow: 0 4px 24px rgba(136, 14, 212, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Sky */
+        .sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 100%);
+        }
+
+        .cbt-side .sky {
+            height: 348px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+        }
+
+        .ivasa-side .sky {
+            background: linear-gradient(180deg, #2e1065 0%, #3b0764 100%);
+        }
+
+        /* Water */
+        .water {
+            position: absolute;
+            top: 120px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, #1e90ff 0%, #0066cc 30%, #003366 70%, #001a33 100%);
+        }
+
+        .cbt-side .water {
+            top: 348px;
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.4) 0%, rgba(109, 40, 217, 0.5) 30%, rgba(76, 29, 149, 0.6) 70%, rgba(46, 16, 101, 0.8) 100%);
+        }
+
+        .cbt-side .waterline {
+            top: 348px;
+            background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.6), transparent);
+        }
+
+        .ivasa-side .water {
+            background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 20%, #0c4a6e 50%, #1e1b4b 80%, #0f0a27 100%);
+        }
+
+        /* Waterline */
+        .waterline {
+            position: absolute;
+            top: 120px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+        }
+
+        .ivasa-side .waterline {
+            background: linear-gradient(90deg, transparent, rgba(0, 208, 98, 0.8), transparent);
+            box-shadow: 0 0 20px rgba(0, 208, 98, 0.5);
+        }
+
+        /* Iceberg */
+        .iceberg {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Iceberg Tip (above water) */
+        .ice-tip {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 60px solid #e8f4f8;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .cbt-side .ice-tip {
+            top: 288px;
+            border-bottom-color: rgba(255, 255, 255, 0.8);
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .ivasa-side .ice-tip {
+            border-bottom-color: #a5f3fc;
+            filter: drop-shadow(0 0 10px rgba(0, 208, 98, 0.5));
+        }
+
+        /* Iceberg Body (below water) */
+        .ice-body {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ice-shape {
+            position: relative;
+            width: 200px;
+            height: 350px;
+        }
+
+        .cbt-side .ice-shape {
+            display: none;
+        }
+
+        /* Create iceberg shape with clip-path */
+        .ice-main {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 320px;
+            background: linear-gradient(180deg,
+                rgba(200, 230, 240, 0.9) 0%,
+                rgba(150, 200, 220, 0.7) 30%,
+                rgba(100, 160, 190, 0.5) 60%,
+                rgba(60, 120, 160, 0.3) 100%
+            );
+            clip-path: polygon(
+                50% 0%,
+                85% 15%,
+                95% 35%,
+                90% 55%,
+                100% 75%,
+                85% 90%,
+                60% 100%,
+                40% 100%,
+                15% 90%,
+                0% 75%,
+                10% 55%,
+                5% 35%,
+                15% 15%
+            );
+        }
+
+        .cbt-side .ice-main {
+            background: linear-gradient(180deg,
+                rgba(150, 170, 180, 0.4) 0%,
+                rgba(100, 120, 140, 0.2) 50%,
+                rgba(60, 80, 100, 0.1) 100%
+            );
+        }
+
+        .ivasa-side .ice-main {
+            background: linear-gradient(180deg,
+                rgba(165, 243, 252, 0.9) 0%,
+                rgba(0, 208, 98, 0.5) 20%,
+                rgba(6, 182, 212, 0.4) 40%,
+                rgba(8, 145, 178, 0.3) 60%,
+                rgba(14, 116, 144, 0.2) 80%,
+                rgba(21, 94, 117, 0.15) 100%
+            );
+            filter: drop-shadow(0 0 20px rgba(0, 208, 98, 0.3));
+        }
+
+        /* Depth Layers - Glowing Rings */
+        .depth-layer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .depth-layer.visible {
+            opacity: 1;
+        }
+
+        .ivasa-side .layer-1 {
+            top: 140px;
+            width: 220px;
+            height: 40px;
+            border: 2px solid rgba(0, 208, 98, 0.8);
+            box-shadow: 0 0 20px rgba(0, 208, 98, 0.6), inset 0 0 20px rgba(0, 208, 98, 0.2);
+        }
+
+        .ivasa-side .layer-2 {
+            top: 200px;
+            width: 260px;
+            height: 50px;
+            border: 2px solid rgba(34, 211, 238, 0.8);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), inset 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+
+        .ivasa-side .layer-3 {
+            top: 270px;
+            width: 240px;
+            height: 45px;
+            border: 2px solid rgba(168, 85, 247, 0.8);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.6), inset 0 0 20px rgba(168, 85, 247, 0.2);
+        }
+
+        .ivasa-side .layer-4 {
+            top: 340px;
+            width: 200px;
+            height: 40px;
+            border: 2px solid rgba(251, 191, 36, 0.8);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), inset 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+
+        .ivasa-side .layer-5 {
+            top: 400px;
+            width: 160px;
+            height: 35px;
+            border: 2px solid rgba(244, 114, 182, 0.8);
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.6), inset 0 0 20px rgba(244, 114, 182, 0.2);
+        }
+
+        /* Layer Labels */
+        .layer-label {
+            position: absolute;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.5s;
+            max-width: 180px;
+            backdrop-filter: blur(10px);
+        }
+
+        .layer-label.visible {
+            opacity: 1;
+        }
+
+        .layer-label h4 {
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .layer-label p {
+            font-size: 11px;
+            color: #cbd5e1;
+            white-space: normal;
+            line-height: 1.3;
+        }
+
+        .ivasa-side .label-surface {
+            top: 45px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ivasa-side .label-surface h4 { color: #e0f2fe; }
+
+        .ivasa-side .label-pattern {
+            top: 130px;
+            right: 10px;
+            background: rgba(0, 208, 98, 0.15);
+            border: 1px solid rgba(0, 208, 98, 0.4);
+        }
+
+        .ivasa-side .label-pattern h4 { color: #00d062; }
+
+        .ivasa-side .label-register {
+            top: 195px;
+            right: 10px;
+            background: rgba(6, 182, 212, 0.2);
+            border: 1px solid rgba(34, 211, 238, 0.4);
+        }
+
+        .ivasa-side .label-register h4 { color: #67e8f9; }
+
+        .ivasa-side .label-stage {
+            top: 265px;
+            left: 10px;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+        }
+
+        .ivasa-side .label-stage h4 { color: #c4b5fd; }
+
+        .ivasa-side .label-memory {
+            top: 335px;
+            left: 10px;
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+
+        .ivasa-side .label-memory h4 { color: #fcd34d; }
+
+        .ivasa-side .label-response {
+            top: 395px;
+            right: 10px;
+            background: rgba(236, 72, 153, 0.2);
+            border: 1px solid rgba(244, 114, 182, 0.4);
+        }
+
+        .ivasa-side .label-response h4 { color: #f9a8d4; }
+
+        /* CBT Labels */
+        .cbt-side .cbt-label {
+            position: absolute;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(196, 181, 253, 0.3);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .cbt-side .cbt-label.visible {
+            opacity: 1;
+        }
+
+        .cbt-side .cbt-label h4 {
+            color: #fff;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .cbt-side .cbt-label p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+        }
+
+        .cbt-side .cbt-label.surface-label {
+            top: 40px;
+            right: 15px;
+        }
+
+        .cbt-side .cbt-label.sentiment-label {
+            top: 40px;
+            left: 20px;
+        }
+
+        .cbt-side .cbt-label.response-label {
+            top: 130px;
+            right: 15px;
+            max-width: 160px;
+        }
+
+        .cbt-side .cbt-label.response-label p {
+            font-style: italic;
+        }
+
+        .cbt-side .cbt-label.hidden-label {
+            top: 230px;
+            left: 15px;
+            text-align: left;
+        }
+
+        .cbt-side .cbt-label.hidden-label h4 {
+            color: #fbbf24;
+        }
+
+        /* Hidden Depths Overlay for CBT */
+        .hidden-overlay {
+            position: absolute;
+            top: 348px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 20px,
+                rgba(46, 16, 101, 0.2) 20px,
+                rgba(46, 16, 101, 0.2) 40px
+            );
+            pointer-events: none;
+        }
+
+        /* Dark Hidden Iceberg in CBT Water */
+        .cbt-hidden-iceberg {
+            position: absolute;
+            top: 348px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 200px;
+            background: linear-gradient(180deg,
+                rgba(46, 16, 101, 0.8) 0%,
+                rgba(30, 10, 70, 0.7) 30%,
+                rgba(20, 5, 50, 0.6) 60%,
+                rgba(15, 5, 40, 0.4) 100%
+            );
+            clip-path: polygon(
+                50% 0%,
+                85% 10%,
+                95% 30%,
+                90% 50%,
+                100% 70%,
+                85% 85%,
+                60% 100%,
+                40% 100%,
+                15% 85%,
+                0% 70%,
+                10% 50%,
+                5% 30%,
+                15% 10%
+            );
+            opacity: 0.9;
+        }
+
+        .cbt-hidden-iceberg::before {
+            content: '?';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: rgba(196, 181, 253, 0.2);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            margin-top: 32px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(196, 181, 253, 0.3);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s;
+        }
+
+        .stats-bar.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(109, 40, 217, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(196, 181, 253, 0.2);
+        }
+
+        .stat-item .stat-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            flex: 1;
+        }
+
+        .stat-item .stat-values {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .stat-item .cbt-val {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .stat-item .vs {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+        .stat-item .ivasa-val {
+            background: linear-gradient(135deg, rgba(0, 208, 98, 0.3), rgba(34, 211, 238, 0.3));
+            padding: 4px 12px;
+            border-radius: 6px;
+            color: #00d062;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid rgba(0, 208, 98, 0.3);
+        }
+
+        .tagline {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+
+        .tagline span {
+            background: linear-gradient(to right, #00d062, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+        }
+
+        /* Animations */
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .depth-layer.visible {
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .ivasa-side .ice-tip {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo in top left corner -->
+    <div class="logo-header">
+        <img src="https://23662432-258403470710332697.preview.editmysite.com/uploads/2/3/6/6/23662432/editor/apple-touch-icon.png?1769784501" alt="iVASA">
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>The Iceberg of Therapeutic Intelligence</h1>
+            <p>Concept Exposure vs. Operational Implementation</p>
+        </div>
+
+        <div class="selector-row" id="selector-row"></div>
+
+        <div class="statement-bar">
+            <div class="statement-label">User Statement</div>
+            <div class="statement-text" id="statement-text">"Part of me wants to stay, but part of me needs to leave."</div>
+        </div>
+
+        <button class="process-btn" id="process-btn" onclick="processStatement()">Process Statement</button>
+
+        <div class="comparison">
+            <!-- CBT Side -->
+            <div class="side cbt-side">
+                <div class="side-label">
+                    <h2>CBT Chatbot</h2>
+                    <p>Surface Processing</p>
+                </div>
+                <div class="ocean-container">
+                    <div class="sky"></div>
+                    <div class="water"></div>
+                    <div class="waterline"></div>
+                    <div class="ice-tip"></div>
+                    <div class="ice-body">
+                        <div class="ice-shape">
+                            <div class="ice-main"></div>
+                        </div>
+                    </div>
+                    <div class="hidden-overlay"></div>
+                    <div class="cbt-hidden-iceberg"></div>
+
+                    <!-- CBT Labels -->
+                    <div class="cbt-label surface-label" id="cbt-surface">
+                        <h4>Surface Layer</h4>
+                        <p>Words detected</p>
+                    </div>
+                    <div class="cbt-label sentiment-label" id="cbt-sentiment">
+                        <h4 id="cbt-sentiment-title">Sentiment: Neutral</h4>
+                        <p id="cbt-emotion-text">Emotion: Uncertainty</p>
+                    </div>
+                    <div class="cbt-label response-label" id="cbt-response">
+                        <h4>Suggested Response</h4>
+                        <p id="cbt-response-text">"Have you tried making a pros and cons list?"</p>
+                    </div>
+                    <div class="cbt-label hidden-label" id="cbt-hidden">
+                        <h4 id="cbt-distortion-title">Cognitive Distortion</h4>
+                        <p id="cbt-distortion-text">Black-and-white thinking</p>
+                        <p style="margin-top: 8px; font-size: 11px; opacity: 0.7;">No cross-session memory<br>No depth tracking</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- iVasa Side -->
+            <div class="side ivasa-side">
+                <div class="side-label">
+                    <div class="logo-row">
+                        <img class="logo" src="https://23662432-258403470710332697.preview.editmysite.com/uploads/2/3/6/6/23662432/editor/apple-touch-icon.png?1769784501" alt="iVASA">
+                        <h2>iVASA</h2>
+                    </div>
+                    <p>Depth Processing</p>
+                </div>
+                <div class="ocean-container">
+                    <div class="sky"></div>
+                    <div class="water"></div>
+                    <div class="waterline"></div>
+                    <div class="ice-tip"></div>
+                    <div class="ice-body">
+                        <div class="ice-shape">
+                            <div class="ice-main"></div>
+                        </div>
+                    </div>
+
+                    <!-- Depth Layers (Glowing Rings) -->
+                    <div class="depth-layer layer-1" id="layer-1"></div>
+                    <div class="depth-layer layer-2" id="layer-2"></div>
+                    <div class="depth-layer layer-3" id="layer-3"></div>
+                    <div class="depth-layer layer-4" id="layer-4"></div>
+                    <div class="depth-layer layer-5" id="layer-5"></div>
+
+                    <!-- Layer Labels -->
+                    <div class="layer-label label-surface" id="ivasa-surface">
+                        <h4>Surface Layer</h4>
+                        <p id="surface-text">"Part of me... part of me needs to leave"</p>
+                    </div>
+                    <div class="layer-label label-pattern" id="ivasa-pattern">
+                        <h4 id="pattern-title">Pattern: Thought</h4>
+                        <p id="pattern-text">Contradiction detected with 87% confidence</p>
+                    </div>
+                    <div class="layer-label label-register" id="ivasa-register">
+                        <h4 id="register-title">Register: Imaginary &rarr; Real</h4>
+                        <p id="register-text">Narrative with bodily pull</p>
+                    </div>
+                    <div class="layer-label label-stage" id="ivasa-stage">
+                        <h4 id="stage-title">Stage: Focus/Bind</h4>
+                        <p id="stage-text">Contradiction surfaced and held</p>
+                    </div>
+                    <div class="layer-label label-memory" id="ivasa-memory">
+                        <h4>Memory Layer</h4>
+                        <p id="memory-text">Links to recurring pattern</p>
+                    </div>
+                    <div class="layer-label label-response" id="ivasa-response">
+                        <h4>Depth Response</h4>
+                        <p id="response-text">"Which part feels older?"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-bar" id="stats-bar">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Processing Layer</span>
+                    <div class="stat-values">
+                        <span class="cbt-val" style="color: #fbbf24;">Surface</span>
+                        <span class="vs">vs</span>
+                        <span class="ivasa-val">Depth</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Distortions / Patterns</span>
+                    <div class="stat-values">
+                        <span class="cbt-val" style="color: #fbbf24;">15+ types</span>
+                        <span class="vs">vs</span>
+                        <span class="ivasa-val">4 depth</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Cross-Session Memory</span>
+                    <div class="stat-values">
+                        <span class="cbt-val">None</span>
+                        <span class="vs">vs</span>
+                        <span class="ivasa-val">Full context</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Clinical Trajectory</span>
+                    <div class="stat-values">
+                        <span class="cbt-val">&mdash;</span>
+                        <span class="vs">vs</span>
+                        <span class="ivasa-val">6 stages</span>
+                    </div>
+                </div>
+            </div>
+            <p class="tagline">"CBT identifies what you're thinking. <span>iVASA tracks why you can't stop.</span>"</p>
+        </div>
+
+        <div class="footer">
+            <p>iVASA &mdash; Operationalized Depth Psychology</p>
+        </div>
+    </div>
+
+    <script>
+        const statements = [
+            {
+                text: "Part of me wants to stay, but part of me needs to leave.",
+                pattern: "Thought",
+                patternText: "Contradiction detected with 87% confidence",
+                register: "Imaginary \u2192 Real",
+                registerText: "Narrative construction with bodily pull",
+                stage: "Focus/Bind",
+                stageText: "Contradiction surfaced and held",
+                memory: "Links to recurring 'part of me' pattern \u2014 attachment vs. autonomy",
+                depthResponse: "There's a split there. Which part feels older?",
+                surfaceResponse: "It sounds like you're experiencing ambivalence. Let's explore both sides \u2014 what would staying give you, and what would leaving give you?",
+                cbtSentiment: "Mixed",
+                cbtEmoji: "\ud83d\ude10",
+                cbtEmotion: "Ambivalence, Internal conflict",
+                cbtDistortion: "Possible black-and-white thinking",
+                cbtHasDistortion: true
+            },
+            {
+                text: "I tell myself I'll stop, but I keep doing the same thing.",
+                pattern: "Behavior",
+                patternText: "Intention-Behavior mismatch with 91% confidence",
+                register: "Symbolic \u2192 Real",
+                registerText: "Cognitive knowing disconnected from action",
+                stage: "Focus/Bind",
+                stageText: "Gap between intention and action identified",
+                memory: "Pattern suggests pre-symbolic material driving behavior",
+                depthResponse: "What happens right before the doing?",
+                surfaceResponse: "This is a common pattern. Let's create an implementation intention: 'When X happens, I will do Y instead.'",
+                cbtSentiment: "Negative",
+                cbtEmoji: "\ud83d\ude14",
+                cbtEmotion: "Frustration, Self-disappointment",
+                cbtDistortion: "All-or-nothing thinking detected",
+                cbtHasDistortion: true
+            },
+            {
+                text: "Sometimes I can handle it, other times it overwhelms me.",
+                pattern: "Change",
+                patternText: "Capacity variability with 82% confidence",
+                register: "Mixed oscillation",
+                registerText: "Between integration and fragmentation",
+                stage: "Completion",
+                stageText: "Flexible holding of variable states",
+                memory: "Movement from rigid to adaptive \u2014 Change emerging",
+                depthResponse: "What's different about the times you can handle it?",
+                surfaceResponse: "Variability is informative. Let's map out: what's happening when you handle it well vs. when it overwhelms you?",
+                cbtSentiment: "Mixed",
+                cbtEmoji: "\ud83d\ude10",
+                cbtEmotion: "Overwhelm, Uncertainty, Some resilience",
+                cbtDistortion: "Possible catastrophizing when overwhelmed",
+                cbtHasDistortion: true
+            },
+            {
+                text: "Something shifted when you said that \u2014 I see it differently now.",
+                pattern: "Insight",
+                patternText: "Integration breakthrough with 94% confidence",
+                register: "Real \u2192 Symbolic",
+                registerText: "Felt shift becoming articulable insight",
+                stage: "Gesture Toward",
+                stageText: "Therapeutic breakthrough detected",
+                memory: "First Insight indicator \u2014 track for consolidation",
+                depthResponse: "Stay with that. What do you see now that you couldn't before?",
+                surfaceResponse: "That's a cognitive reframe! This is the breakthrough we work toward. Can you describe what changed?",
+                cbtSentiment: "Positive",
+                cbtEmoji: "\ud83d\ude0a",
+                cbtEmotion: "Hope, Curiosity, Insight",
+                cbtDistortion: "No distortions detected",
+                cbtHasDistortion: false
+            }
+        ];
+
+        let selectedIndex = 0;
+        let isProcessing = false;
+
+        function init() {
+            const row = document.getElementById('selector-row');
+            statements.forEach(function(stmt, idx) {
+                const btn = document.createElement('button');
+                btn.className = 'selector-btn' + (idx === 0 ? ' active' : '');
+                btn.textContent = stmt.pattern;
+                btn.onclick = function() { selectStatement(idx); };
+                row.appendChild(btn);
+            });
+        }
+
+        function selectStatement(idx) {
+            if (isProcessing) return;
+            selectedIndex = idx;
+
+            document.querySelectorAll('.selector-btn').forEach(function(btn, i) {
+                btn.className = 'selector-btn' + (i === idx ? ' active' : '');
+            });
+
+            document.getElementById('statement-text').textContent = '\u201c' + statements[idx].text + '\u201d';
+            resetVisuals();
+        }
+
+        function resetVisuals() {
+            for (var i = 1; i <= 5; i++) {
+                document.getElementById('layer-' + i).classList.remove('visible');
+            }
+
+            ['cbt-surface', 'cbt-sentiment', 'cbt-response', 'cbt-hidden',
+             'ivasa-surface', 'ivasa-pattern', 'ivasa-register', 'ivasa-stage', 'ivasa-memory', 'ivasa-response'
+            ].forEach(function(id) {
+                document.getElementById(id).classList.remove('visible');
+            });
+
+            document.getElementById('stats-bar').classList.remove('visible');
+        }
+
+        function processStatement() {
+            if (isProcessing) return;
+            isProcessing = true;
+
+            var btn = document.getElementById('process-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Processing...';
+
+            resetVisuals();
+
+            var stmt = statements[selectedIndex];
+
+            document.getElementById('surface-text').textContent = '\u201c' + stmt.text.substring(0, 30) + '...\u201d';
+            document.getElementById('pattern-title').textContent = 'Pattern: ' + stmt.pattern;
+            document.getElementById('pattern-text').textContent = stmt.patternText;
+            document.getElementById('register-title').textContent = 'Register: ' + stmt.register;
+            document.getElementById('register-text').textContent = stmt.registerText;
+            document.getElementById('stage-title').textContent = 'Stage: ' + stmt.stage;
+            document.getElementById('stage-text').textContent = stmt.stageText;
+            document.getElementById('memory-text').textContent = stmt.memory;
+            document.getElementById('response-text').textContent = '\u201c' + stmt.depthResponse + '\u201d';
+            document.getElementById('cbt-response-text').textContent = '\u201c' + stmt.surfaceResponse + '\u201d';
+
+            document.getElementById('cbt-sentiment-title').textContent = stmt.cbtEmoji + ' Sentiment: ' + stmt.cbtSentiment;
+            document.getElementById('cbt-emotion-text').textContent = 'Emotion: ' + stmt.cbtEmotion;
+
+            var distortionIcon = stmt.cbtHasDistortion ? '\u26a0\ufe0f' : '\u2713';
+            document.getElementById('cbt-distortion-title').textContent = distortionIcon + ' Cognitive Distortion';
+            document.getElementById('cbt-distortion-text').textContent = stmt.cbtDistortion;
+
+            setTimeout(function() {
+                document.getElementById('cbt-surface').classList.add('visible');
+                document.getElementById('ivasa-surface').classList.add('visible');
+            }, 300);
+
+            setTimeout(function() {
+                document.getElementById('cbt-sentiment').classList.add('visible');
+                document.getElementById('layer-1').classList.add('visible');
+                document.getElementById('ivasa-pattern').classList.add('visible');
+            }, 800);
+
+            setTimeout(function() {
+                document.getElementById('layer-2').classList.add('visible');
+                document.getElementById('ivasa-register').classList.add('visible');
+            }, 1300);
+
+            setTimeout(function() {
+                document.getElementById('cbt-response').classList.add('visible');
+                document.getElementById('layer-3').classList.add('visible');
+                document.getElementById('ivasa-stage').classList.add('visible');
+            }, 1800);
+
+            setTimeout(function() {
+                document.getElementById('layer-4').classList.add('visible');
+                document.getElementById('ivasa-memory').classList.add('visible');
+            }, 2300);
+
+            setTimeout(function() {
+                document.getElementById('cbt-hidden').classList.add('visible');
+                document.getElementById('layer-5').classList.add('visible');
+                document.getElementById('ivasa-response').classList.add('visible');
+            }, 2800);
+
+            setTimeout(function() {
+                document.getElementById('stats-bar').classList.add('visible');
+                btn.disabled = false;
+                btn.innerHTML = 'Process Statement';
+                isProcessing = false;
+            }, 3300);
+        }
+
+        init();
+    </script>
+</body>
+</html>
