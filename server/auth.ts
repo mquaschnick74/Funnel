@@ -11,6 +11,9 @@ function hashPassword(password: string): string {
 }
 
 export function setupAuth(app: Express) {
+  // Trust first proxy (Replit reverse proxy) so secure cookies work
+  app.set('trust proxy', 1);
+
   // Session configuration
   app.use(
     session({
@@ -20,6 +23,7 @@ export function setupAuth(app: Express) {
       cookie: {
         secure: process.env.NODE_ENV === "production",
         httpOnly: true,
+        sameSite: 'lax',
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
       },
     })
