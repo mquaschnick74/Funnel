@@ -5,6 +5,8 @@ import { storage } from "./storage";
 import { weeklyRecapService } from "./services/weekly-recap-service";
 import { setupAuth, requireAuth } from "./auth";
 import { customEmailService } from "./services/custom-email-service";
+import { xpostService } from "./services/xpost-service";
+import type { PostTopic } from "./services/skill-graph-loader";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
@@ -217,6 +219,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error uploading image:", error);
       res.status(500).json({ error: "Failed to upload image" });
+    }
+  });
+
+  // ============ X POST GENERATION ROUTES ============
+
+  // Generate an X post using the content skill graph
+  app.post("/api/admin/generate-xpost", requireAuth, async (req, res) => {
+    try {
+      const { topic = 'therapy-desert' } = req.body as { topic?: PostTopic };
+      const post = await xpostService.generateXPost(topic);
+      res.json(post);
+    } catch (error) {
+      console.error("Error generating X post:", error);
+      res.status(500).json({ error: "Failed to generate X post" });
+    }
+  });
+
+  // Generate and save an X post to Supabase for review
+  app.post("/api/admin/generate-and-save-xpost", requireAuth, async (req, res) => {
+    try {
+      const { topic = 'therapy-desert' } = req.body as { topic?: PostTopic };
+      const post = await xpostService.generateAndSaveXPost(topic);
+      res.json(post);
+    } catch (error) {
+      console.error("Error generating and saving X post:", error);
+      res.status(500).json({ error: "Failed to generate and save X post" });
     }
   });
 
