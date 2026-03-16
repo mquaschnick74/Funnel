@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { weeklyRecapService } from "./services/weekly-recap-service";
 import { setupAuth, requireAuth } from "./auth";
 import { customEmailService } from "./services/custom-email-service";
+import { xpostService } from "./services/xpost-service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
@@ -217,6 +218,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error uploading image:", error);
       res.status(500).json({ error: "Failed to upload image" });
+    }
+  });
+
+  // ============ X POST ROUTES ============
+
+  // Get all draft posts awaiting approval
+  app.get('/api/x-posts/drafts', requireAuth, async (req, res) => {
+    try {
+      const drafts = await xpostService.getDrafts();
+      res.json(drafts);
+    } catch (error) {
+      console.error('Error fetching X post drafts:', error);
+      res.status(500).json({ error: 'Failed to fetch drafts' });
+    }
+  });
+
+  // Get post history
+  app.get('/api/x-posts/history', requireAuth, async (req, res) => {
+    try {
+      const history = await xpostService.getHistory();
+      res.json(history);
+    } catch (error) {
+      console.error('Error fetching X post history:', error);
+      res.status(500).json({ error: 'Failed to fetch history' });
+    }
+  });
+
+  // Approve a draft
+  app.post('/api/x-posts/approve', requireAuth, async (req, res) => {
+    try {
+      const { id, selectedVariation, editedContent } = req.body;
+      if (!id || !selectedVariation) {
+        return res.status(400).json({ error: 'id and selectedVariation are required' });
+      }
+      await xpostService.approveDraft(id, selectedVariation, editedContent);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error approving draft:', error);
+      res.status(500).json({ error: 'Failed to approve draft' });
+    }
+  });
+
+  // Reject a draft
+  app.post('/api/x-posts/reject', requireAuth, async (req, res) => {
+    try {
+      const { id, reason } = req.body;
+      if (!id) {
+        return res.status(400).json({ error: 'id is required' });
+      }
+      await xpostService.rejectDraft(id, reason);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error rejecting draft:', error);
+      res.status(500).json({ error: 'Failed to reject draft' });
+    }
+  });
+
+  // Mark an approved post as posted
+  app.post('/api/x-posts/mark-posted', requireAuth, async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) {
+        return res.status(400).json({ error: 'id is required' });
+      }
+      await xpostService.markPosted(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error marking post as posted:', error);
+      res.status(500).json({ error: 'Failed to mark as posted' });
+    }
+  });
+
+  // Manual generation trigger
+  app.post('/api/x-posts/generate', requireAuth, async (req, res) => {
+    try {
+      await xpostService.generateDailyDraft();
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error generating X post drafts:', error);
+      res.status(500).json({ error: 'Failed to generate drafts' });
     }
   });
 

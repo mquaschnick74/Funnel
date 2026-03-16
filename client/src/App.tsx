@@ -9,6 +9,7 @@ import MeditationLibrary from "@/pages/MeditationLibrary";
 import VideoLibrary from "@/pages/VideoLibrary";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminEmailGenerator from "@/pages/AdminEmailGenerator";
+import XPostsPage from "@/pages/XPostsPage";
 import NotFound from "@/pages/not-found";
 import { useIframeMessaging } from "@/hooks/useIframeMessaging";
 
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/videos" component={VideoLibrary} />
       <Route path="/admin" component={AdminLogin} />
       <Route path="/admin/email-generator" component={AdminEmailGenerator} />
+      <Route path="/x-posts" component={XPostsPage} />
       <Route component={NotFound} />
     </Switch>
   );
