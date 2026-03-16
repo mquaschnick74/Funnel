@@ -1,13 +1,26 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 
-// Initialize clients
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy-initialized to avoid crashing at import if env vars are missing
+let _supabase: SupabaseClient | null = null;
+let _resend: Resend | null = null;
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getSupabase(): SupabaseClient {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
+
+function getResend(): Resend {
+  if (!_resend) {
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
 
 interface UserNeedingRecap {
   user_id: string;
@@ -42,7 +55,7 @@ export class WeeklyRecapService {
       if (!prefsData || prefsData.length === 0) {
         console.log('No users with weekly_recap_enabled found');
         // Debug: Let's see ALL preferences
-        const { data: allPrefs } = await supabase.from('user_email_preferences').select('*');
+        const { data: allPrefs } = await getSupabase().from('user_email_preferences').select('*');
         console.log('📋 ALL email preferences in DB:', allPrefs);
         return [];
       }
@@ -146,7 +159,7 @@ export class WeeklyRecapService {
       console.log(`📧 Sending recap email to ${user.email}...`);
 
       // Send email with Resend
-      const { data, error } = await resend.emails.send({
+      const { data, error } = await getResend().emails.send({
         from: 'iVASA Therapeutic Insights <insights@ivasa.ai>',
         to: user.email,
         subject: 'Your Weekly Therapeutic Insights from iVASA',
