@@ -3,6 +3,7 @@ import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { startWeeklyRecapCron } from "./jobs/weekly-recap-cron";
+import { startXPostCron } from "./crons/x-post-cron";
 
 const app = express();
 
@@ -94,8 +95,9 @@ app.use((req, res, next) => {
     }, () => {
       log(`serving on port ${port}`);
 
-      // Start weekly recap cron job
+      // Start cron jobs
       startWeeklyRecapCron();
+      startXPostCron();
     });
   } catch (error) {
     console.error('Fatal error during startup:', error);

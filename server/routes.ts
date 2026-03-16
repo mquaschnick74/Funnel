@@ -6,7 +6,6 @@ import { weeklyRecapService } from "./services/weekly-recap-service";
 import { setupAuth, requireAuth } from "./auth";
 import { customEmailService } from "./services/custom-email-service";
 import { xpostService } from "./services/xpost-service";
-import type { PostTopic } from "./services/skill-graph-loader";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
@@ -222,29 +221,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ============ X POST GENERATION ROUTES ============
+  // ============ X POST ROUTES ============
 
-  // Generate an X post using the content skill graph
-  app.post("/api/admin/generate-xpost", requireAuth, async (req, res) => {
+  // Get all draft posts awaiting approval
+  app.get('/api/x-posts/drafts', requireAuth, async (req, res) => {
     try {
-      const { topic = 'therapy-desert' } = req.body as { topic?: PostTopic };
-      const post = await xpostService.generateXPost(topic);
-      res.json(post);
+      const drafts = await xpostService.getDrafts();
+      res.json(drafts);
     } catch (error) {
-      console.error("Error generating X post:", error);
-      res.status(500).json({ error: "Failed to generate X post" });
+      console.error('Error fetching X post drafts:', error);
+      res.status(500).json({ error: 'Failed to fetch drafts' });
     }
   });
 
-  // Generate and save an X post to Supabase for review
-  app.post("/api/admin/generate-and-save-xpost", requireAuth, async (req, res) => {
+  // Get post history
+  app.get('/api/x-posts/history', requireAuth, async (req, res) => {
     try {
-      const { topic = 'therapy-desert' } = req.body as { topic?: PostTopic };
-      const post = await xpostService.generateAndSaveXPost(topic);
-      res.json(post);
+      const history = await xpostService.getHistory();
+      res.json(history);
     } catch (error) {
-      console.error("Error generating and saving X post:", error);
-      res.status(500).json({ error: "Failed to generate and save X post" });
+      console.error('Error fetching X post history:', error);
+      res.status(500).json({ error: 'Failed to fetch history' });
+    }
+  });
+
+  // Approve a draft
+  app.post('/api/x-posts/approve', requireAuth, async (req, res) => {
+    try {
+      const { id, selectedVariation, editedContent } = req.body;
+      if (!id || !selectedVariation) {
+        return res.status(400).json({ error: 'id and selectedVariation are required' });
+      }
+      await xpostService.approveDraft(id, selectedVariation, editedContent);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error approving draft:', error);
+      res.status(500).json({ error: 'Failed to approve draft' });
+    }
+  });
+
+  // Reject a draft
+  app.post('/api/x-posts/reject', requireAuth, async (req, res) => {
+    try {
+      const { id, reason } = req.body;
+      if (!id) {
+        return res.status(400).json({ error: 'id is required' });
+      }
+      await xpostService.rejectDraft(id, reason);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error rejecting draft:', error);
+      res.status(500).json({ error: 'Failed to reject draft' });
+    }
+  });
+
+  // Mark an approved post as posted
+  app.post('/api/x-posts/mark-posted', requireAuth, async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) {
+        return res.status(400).json({ error: 'id is required' });
+      }
+      await xpostService.markPosted(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error marking post as posted:', error);
+      res.status(500).json({ error: 'Failed to mark as posted' });
+    }
+  });
+
+  // Manual generation trigger
+  app.post('/api/x-posts/generate', requireAuth, async (req, res) => {
+    try {
+      await xpostService.generateDailyDraft();
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error generating X post drafts:', error);
+      res.status(500).json({ error: 'Failed to generate drafts' });
     }
   });
 
