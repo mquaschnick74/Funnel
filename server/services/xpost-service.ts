@@ -3,17 +3,29 @@
 // 9-slot PCA rotation, 3 variations per generation, approval workflow.
 
 import Anthropic from '@anthropic-ai/sdk';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { loadSkillGraph, type SlotName } from './skill-graph-loader';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
-});
+// Lazy-initialized to avoid crashing at import if env vars are missing
+let _anthropic: Anthropic | null = null;
+let _supabase: SupabaseClient | null = null;
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getAnthropic(): Anthropic {
+  if (!_anthropic) {
+    _anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
+  }
+  return _anthropic;
+}
+
+function getSupabase(): SupabaseClient {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
 // ============================================================
 // SLOT DEFINITIONS
@@ -98,7 +110,7 @@ const SLOTS: SlotDefinition[] = [
 // ============================================================
 
 async function getCurrentRotationIndex(): Promise<number> {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from('x_post_drafts')
     .select('rotation_index')
     .order('created_at', { ascending: false })
@@ -145,7 +157,7 @@ export async function generateDailyDraft(): Promise<void> {
   // Assemble system prompt from the modular skill graph
   const systemPrompt = loadSkillGraph({ platform: 'x', slotName: slot.name });
 
-  const message = await anthropic.messages.create({
+  const message = await getAnthropic().messages.create({
     model: 'claude-opus-4-6',
     max_tokens: 1024,
     system: systemPrompt,
@@ -164,7 +176,7 @@ export async function generateDailyDraft(): Promise<void> {
 
   const [variationA, variationB, variationC] = parseThreeVariations(rawContent);
 
-  const { error } = await supabase.from('x_post_drafts').insert({
+  const { error } = await getSupabase().from('x_post_drafts').insert({
     slot_name: slot.name,
     variation_a: variationA,
     variation_b: variationB,
@@ -185,7 +197,7 @@ export async function generateDailyDraft(): Promise<void> {
 // ============================================================
 
 export async function getDrafts() {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('x_post_drafts')
     .select('id, slot_name, variation_a, variation_b, variation_c, status, created_at')
     .eq('status', 'draft')
@@ -196,7 +208,7 @@ export async function getDrafts() {
 }
 
 export async function getHistory() {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('x_post_drafts')
     .select('id, slot_name, selected_variation, edited_content, status, rejected_reason, posted_at, created_at')
     .in('status', ['approved', 'rejected', 'posted'])
@@ -212,7 +224,7 @@ export async function approveDraft(
   selectedVariation: string,
   editedContent?: string
 ): Promise<void> {
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('x_post_drafts')
     .update({
       status: 'approved',
@@ -226,7 +238,7 @@ export async function approveDraft(
 }
 
 export async function rejectDraft(id: string, reason?: string): Promise<void> {
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('x_post_drafts')
     .update({
       status: 'rejected',
@@ -239,7 +251,7 @@ export async function rejectDraft(id: string, reason?: string): Promise<void> {
 }
 
 export async function markPosted(id: string): Promise<void> {
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('x_post_drafts')
     .update({
       status: 'posted',
