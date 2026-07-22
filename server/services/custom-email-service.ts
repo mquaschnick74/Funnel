@@ -1,15 +1,29 @@
 import { Resend } from 'resend';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { randomUUID } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Initialize clients
-const resend = new Resend(process.env.RESEND_API_KEY);
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy-initialized to avoid crashing at import if env vars are missing
+let _resend: Resend | null = null;
+let _supabase: SupabaseClient | null = null;
+
+function getResend(): Resend {
+  if (!_resend) {
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
+
+function getSupabase(): SupabaseClient {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
 // Email content block types
 export interface TextBlock {
@@ -374,7 +388,7 @@ export class CustomEmailService {
 
     for (const recipient of recipients) {
       try {
-        const { error } = await resend.emails.send({
+        const { error } = await getResend().emails.send({
           from: 'iVASA <insights@ivasa.ai>',
           to: recipient,
           subject,

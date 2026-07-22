@@ -357,6 +357,13 @@ export default function AdminEmailGenerator() {
               className="h-8 w-auto"
             />
             <span className="text-white font-semibold">Email Generator</span>
+            <span className="text-white/30 mx-2">|</span>
+            <button
+              onClick={() => setLocation('/x-posts')}
+              className="text-white/60 hover:text-white text-sm font-medium transition-colors"
+            >
+              X Posts
+            </button>
           </div>
           <div className="flex items-center gap-2">
             <Button
