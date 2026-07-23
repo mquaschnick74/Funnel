@@ -7,7 +7,7 @@ interface LandingStepProps {
 export default function LandingStep({ onStart }: LandingStepProps) {
   const signals = [
     "Takes about 90 seconds",
-    "1,000+ Ai sessions conducted",
+    "Safety-First (Non-Crisis Therapy)",
     "Based on 20+ years of clinical research",
     "Completely confidential",
   ];

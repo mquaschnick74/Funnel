@@ -55,8 +55,13 @@ export default function AssessmentShell({ step, stepIndex, onSkipAll, children }
         {/* persistent hero */}
         {showHero && (
           <div style={{ textAlign: "center", marginBottom: 22 }}>
-            <h1 style={{ fontSize: 28, lineHeight: 1.18, fontWeight: 800, letterSpacing: "-0.03em", margin: 0 }}>
-              See beneath the <span style={{ color: T.emBright }}>pattern</span> you've been running
+            <h1 style={{ margin: 0 }}>
+              <span style={{ display: "block", fontSize: 50, lineHeight: 1.12, fontWeight: 800, letterSpacing: "-0.03em" }}>
+                Real Mental Health Therapy:
+              </span>
+              <span style={{ display: "block", fontSize: 21, lineHeight: 1.25, fontWeight: 700, letterSpacing: "-0.01em", marginTop: 8 }}>
+                <span style={{ color: T.emBright }}>See (</span>the pattern<span style={{ color: T.emBright }}>) beneath...</span>
+              </span>
             </h1>
             <div
               style={{
@@ -65,7 +70,7 @@ export default function AssessmentShell({ step, stepIndex, onSkipAll, children }
                 border: `1px solid ${T.line}`, background: "rgba(255,255,255,0.03)",
               }}
             >
-              <span aria-hidden="true" style={{ color: T.emBright }}>✦</span> Free pattern profile
+              <span aria-hidden="true" style={{ color: T.emBright }}>✦</span> Free profile, no credit card
             </div>
           </div>
         )}
