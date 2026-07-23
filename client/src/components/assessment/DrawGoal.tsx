@@ -34,7 +34,13 @@ export default function DrawGoal({ drawn, setDrawn, onNext, onBack, cta }: DrawG
       y: Math.max(PAD, Math.min(H - PAD, cy)),
     };
   };
-  const start = (e: PointerEvent<SVGSVGElement>) => { dragging.current = true; setPts([toPoint(e)]); };
+  const start = (e: PointerEvent<SVGSVGElement>) => {
+    // Without this, a drag that crosses existing selected text starts a native
+    // drag operation and Chromium fires pointercancel, killing the stroke.
+    e.preventDefault();
+    dragging.current = true;
+    setPts([toPoint(e)]);
+  };
   const move = (e: PointerEvent<SVGSVGElement>) => {
     if (!dragging.current) return;
     const p = toPoint(e);
@@ -65,7 +71,7 @@ export default function DrawGoal({ drawn, setDrawn, onNext, onBack, cta }: DrawG
             ref={svgRef}
             viewBox={`0 0 ${W} ${H}`}
             data-testid="draw-canvas"
-            style={{ width: "100%", height: "auto", touchAction: "none", display: "block", borderRadius: 12, background: "rgba(10,8,22,0.55)", cursor: "crosshair" }}
+            style={{ width: "100%", height: "auto", touchAction: "none", userSelect: "none", display: "block", borderRadius: 12, background: "rgba(10,8,22,0.55)", cursor: "crosshair" }}
             onPointerDown={start} onPointerMove={move} onPointerUp={end} onPointerLeave={end}
           >
             {[0.25, 0.5, 0.75].map((f) => (
