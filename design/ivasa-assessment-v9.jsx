@@ -1,7 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 
 /* ============================================================
-   iVASA Assessment — flow prototype v9
+   iVASA Assessment — flow prototype v13
+   v13: emerald reversed on line 2 — "See (" and ") beneath..."
+   are emerald, "the pattern" is white; period replaced with an
+   ellipsis; line 1 shortened to "Real Mental Health Therapy:".
+   v12: parentheses stay white — only "the pattern" is emerald;
+   chip is now "✦ Free profile, no credit card".
+   v11: literal parentheses in hero line 2 — "See (the pattern)
+   beneath." with "(the pattern)" incl. parens in emerald.
+   v10: hero is now two lines — "Real Mental/Behavioral Health
+   Therapy:" (larger) over "See the pattern beneath." (smaller,
+   'the pattern' in emerald); chip is "Free profile"; trust
+   signal "1,000+ Ai sessions conducted" replaced with
+   "Safety-First (Non-Crisis Therapy)".
    v9: header icon reduced to 22px so the wordmark leads;
    headline now "See beneath the pattern you've been running"
    with 'pattern' as the highlighted word.
@@ -315,15 +327,20 @@ export default function App() {
         {/* persistent hero */}
         {showHero && (
           <div style={{ textAlign: "center", marginBottom: 22 }}>
-            <h1 style={{ fontSize: 28, lineHeight: 1.18, fontWeight: 800, letterSpacing: "-0.03em", margin: 0 }}>
-              See beneath the <span style={{ color: T.emBright }}>pattern</span> you've been running
+            <h1 style={{ margin: 0 }}>
+              <span style={{ display: "block", fontSize:50, lineHeight: 1.12, fontWeight: 800, letterSpacing: "-0.03em" }}>
+                Real Mental Health Therapy:
+              </span>
+              <span style={{ display: "block", fontSize: 21, lineHeight: 1.25, fontWeight: 700, letterSpacing: "-0.01em", marginTop: 8 }}>
+                <span style={{ color: T.emBright }}>See (</span>the pattern<span style={{ color: T.emBright }}>) beneath...</span>
+              </span>
             </h1>
             <div style={{
               display: "inline-flex", alignItems: "center", gap: 8, marginTop: 14,
               padding: "8px 16px", borderRadius: 999, fontSize: 14, color: T.ink,
               border: `1px solid ${T.line}`, background: "rgba(255,255,255,0.03)",
             }}>
-              <span aria-hidden="true" style={{ color: T.emBright }}>✦</span> Free pattern profile
+              <span aria-hidden="true" style={{ color: T.emBright }}>✦</span> Free profile, no credit card
             </div>
           </div>
         )}
@@ -421,7 +438,7 @@ function Panel({ children, accent }) {
 function Landing({ onStart }) {
   const signals = [
     "Takes about 90 seconds",
-    "1,000+ Ai sessions conducted",
+    "Safety-First (Non-Crisis Therapy)",
     "Based on 20+ years of clinical research",
     "Completely confidential",
   ];
